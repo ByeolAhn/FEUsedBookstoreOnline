@@ -15,7 +15,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" elemennt={<Header />}>
+        <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
         </Route>
       </Routes>
