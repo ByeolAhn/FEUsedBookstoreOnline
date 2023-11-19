@@ -33,7 +33,7 @@ const Header = () => {
               </li>
               <li className="nav-item dropdown">
                 <Link className='nav-link dropdown-toggle' to="#" role="button" data-bs-toggle="dropdown">
-                  <i className="fa-solid fa-barcode"></i> Books
+                  <i className="fa-solid fa-book"></i> Books
                 </Link>
                 <ul className="dropdown-menu">
                   <li>
