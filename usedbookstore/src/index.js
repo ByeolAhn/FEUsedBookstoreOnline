@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from './components/header';
 import Home from './pages/home';
+import Signin from './components/auth/signin';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css'
@@ -17,6 +18,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
+          <Route path='users/signin' element={<Signin/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
