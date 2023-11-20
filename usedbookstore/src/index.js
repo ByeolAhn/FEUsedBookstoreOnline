@@ -20,9 +20,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route path="books/create" element={<AddBooks />} />
-          <Route path="books/update/:isbn" element={<EditBooks />} />
-          <Route path="books/get" element={<ListBooks />} />
+          <Route path="/books/add" element={<AddBooks />} /> 
+          <Route path="books/create" element={<AddBooks/>} />
         </Route>
       </Routes>
       <Footer />

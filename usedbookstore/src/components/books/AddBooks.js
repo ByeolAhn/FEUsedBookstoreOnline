@@ -1,11 +1,32 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../datasource/api-books";
-import BooksModel from "../../datasource/booksModel";
+import BookModel from "../../datasource/booksModel"; // Make sure the path is correct
+import './addBookStyles.css';
+
+const condition = ["New", "Used", "Worn"];
+// Predefined list of categories
+const categories = [
+  "Fiction",
+  "Non-fiction",
+  "Science Fiction",
+  "Fantasy",
+  "Mystery",
+  "Thriller",
+  "Horror",
+  "Romance",
+  "Biography",
+  "Self-Help",
+  "Historical",
+  "Cooking",
+  "Travel",
+  "Poetry",
+  // Add more categories as needed
+];
 
 const AddBooks = () => {
   let navigate = useNavigate();
-  let [product, setProduct] = useState(new BooksModel());
+  let [product, setProduct] = useState(new BookModel('', '', '', '', 'new', 0, ''));
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -14,6 +35,7 @@ const AddBooks = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
     let newProduct = {
       id: product.id,
       item: product.item,
@@ -43,127 +65,104 @@ const AddBooks = () => {
   };
 
   return (
-    // -- Content for the Add page --
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
         <div className="offset-md-3 col-md-6">
-          <h1>Add a new item</h1>
+          <h1>Add a new Book</h1>
 
           <form onSubmit={handleSubmit} className="form">
             <div className="form-group">
-              <input type="hidden" name="id" value={product.id || ""}></input>
-              <label htmlFor="itemTextField">Item Name</label>
+              <label htmlFor="isbnField">ISBN:</label>
               <input
                 type="text"
                 className="form-control"
-                id="itemTextField"
-                placeholder="Enter the Item Name"
-                name="item"
-                value={product.item || ""}
+                id="isbnField"
+                placeholder="Enter the ISBN"
+                name="isbn"
+                value={product.isbn || ""}
                 onChange={handleChange}
                 required
-              ></input>
+              />
             </div>
-            <br />
             <div className="form-group">
-              <label htmlFor="QtyTextField">Quantity</label>
-              <input
-                type="number"
+              <label htmlFor="categoryField">Category:</label>
+              <select
                 className="form-control"
-                id="QtyTextField"
-                placeholder="00"
-                name="qty"
-                value={product.qty || 0}
+                id="categoryField"
+                name="category"
+                value={product.category || ""}
                 onChange={handleChange}
                 required
-              ></input>
+              >
+                <option value="">Select a Category</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
-            <br />
             <div className="form-group">
-              <label htmlFor="statusTextField">Status</label>
+              <label htmlFor="authorField">Author:</label>
               <input
                 type="text"
                 className="form-control"
-                id="statusTextField"
-                placeholder="Enter a status"
-                name="status"
-                value={product.status || ""}
+                id="authorField"
+                placeholder="Enter the Author"
+                name="author"
+                value={product.author || ""}
                 onChange={handleChange}
-              ></input>
+                required
+              />
             </div>
-            <br />
-            <div className="card">
-              <div className="card-header">Size</div>
-              <div className="card-body">
-                <div className="form-group">
-                  <label htmlFor="hightTextField">Hight</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    className="form-control"
-                    id="hightTextField"
-                    placeholder="0.00"
-                    name="size_h"
-                    value={product.size_h || 0}
-                    required
-                    onChange={handleChange}
-                  ></input>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="widthTextField">Width</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    className="form-control"
-                    id="widthTextField"
-                    placeholder="0.00"
-                    name="size_w"
-                    value={product.size_w || 0}
-                    onChange={handleChange}
-                    required
-                  ></input>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="uomTextField">UOM</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="uomTextField"
-                    placeholder="cm"
-                    name="size_uom"
-                    value={product.size_uom || ""}
-                    onChange={handleChange}
-                    required
-                  ></input>
-                </div>
-              </div>
-            </div>
-            <br />
             <div className="form-group">
-              <label htmlFor="tagTextArea">
-                Tags{" "}
-                <span className="text-muted">[use , to separate tags]</span>
-              </label>
+              <label htmlFor="conditionField">Condition:</label>
+              <select
+                className="form-control"
+                id="conditionField"
+                name="condition"
+                value={product.condition || "New"}
+                onChange={handleChange}
+                required
+              >
+                {condition.map((condition) => (
+                  <option key={condition} value={condition}>
+                    {condition}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+  <label htmlFor="priceField">Price:</label>
+  <input
+    type="number"
+    className="form-control"
+    id="priceField"
+    placeholder="Enter the Price"
+    name="price"
+    value={product.price || 0}
+    onChange={handleChange}
+    min={0} // Set the minimum value to 0
+    required
+  />
+</div>
+            <div className="form-group">
+              <label htmlFor="descriptionField">Description:</label>
               <textarea
-                type="text"
                 className="form-control"
-                id="tagTextArea"
-                placeholder="Enter the tags of the item"
-                name="tags"
-                value={product.tags || ""}
+                id="descriptionField"
+                placeholder="Enter the Description"
+                name="description"
+                value={product.description || ""}
                 onChange={handleChange}
+                required
               ></textarea>
             </div>
-            <br />
-
             <button className="btn btn-primary" type="submit">
               <i className="fas fa-edit"></i>
               Submit
             </button>
-
-            <Link href="#" to="/books/create" className="btn btn-warning">
+            <Link to="/books/list" className="btn btn-warning">
               <i className="fas fa-undo"></i>
               Cancel
             </Link>
