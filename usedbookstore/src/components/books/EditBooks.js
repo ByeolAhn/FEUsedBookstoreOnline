@@ -188,7 +188,7 @@ const EditBooks = () => {
               Submit
             </button>
 
-            <Link href="#" to="/inventory/list" className="btn btn-warning">
+            <Link href="#" to="/books/create" className="btn btn-warning">
               <i className="fas fa-undo"></i>
               Cancel
             </Link>
