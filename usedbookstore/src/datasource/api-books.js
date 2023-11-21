@@ -2,14 +2,18 @@ let apiURL = process.env.REACT_APP_APIURL || "http://localhost:3001";
 
 const create = async (product) => {
   try {
-    let response = await fetch(apiURL + "/books/create/", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-    });
+    let response = await fetch(
+      apiURL +
+        "/books/create/" +
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(product),
+        }
+    );
     return await response.json();
   } catch (err) {
     console.log(err);
@@ -50,13 +54,17 @@ const update = async (isbn, item) => {
 
 const list = async () => {
   try {
-    let response = await fetch(apiURL + "/books/get/", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
+    let response = await fetch(
+      apiURL +
+        "/books/get/" +
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+    );
     return await response.json();
   } catch (err) {
     console.log(err);

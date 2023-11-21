@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../datasource/api-books";
-import BookModel from "../../datasource/booksModel"; // Make sure the path is correct
-import './addBookStyles.css';
+import BookModel from "../../datasource/booksModel";
+import "./addBookStyles.css";
 
-const condition = ["New", "Used", "Worn"];
+const condition = ["New", "Like new", "Used", "Worn"];
+
 // Predefined list of categories
 const categories = [
   "Fiction",
@@ -21,12 +22,13 @@ const categories = [
   "Cooking",
   "Travel",
   "Poetry",
-  // Add more categories as needed
 ];
 
 const AddBooks = () => {
   let navigate = useNavigate();
-  let [product, setProduct] = useState(new BookModel('', '', '', '', 'new', 0, ''));
+  let [product, setProduct] = useState(
+    new BookModel("", "", "", "", "", 0, "")
+  );
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -38,22 +40,20 @@ const AddBooks = () => {
 
     let newProduct = {
       id: product.id,
-      item: product.item,
-      qty: product.qty,
-      tags: product.tags.toString(),
-      status: product.status,
-      size: {
-        h: product.size_h,
-        w: product.size_w,
-        uom: product.size_uom,
-      },
+      isbn: product.isbn,
+      category: product.category,
+      title: product.title,
+      author: product.author,
+      condition: product.condition,
+      price: product.price,
+      description: product.description,
     };
 
     create(newProduct)
       .then((data) => {
         if (data && data.id) {
           alert("Item added with the id " + data.id);
-          navigate("/inventory/list");
+          navigate("/books/get");
         } else {
           alert(data.message);
         }
@@ -72,6 +72,9 @@ const AddBooks = () => {
 
           <form onSubmit={handleSubmit} className="form">
             <div className="form-group">
+              <input type="hidden" name="id" value={product.id || ""}></input>
+
+              {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>
               <input
                 type="text"
@@ -84,6 +87,8 @@ const AddBooks = () => {
                 required
               />
             </div>
+
+            {/* CATEGORY */}
             <div className="form-group">
               <label htmlFor="categoryField">Category:</label>
               <select
@@ -102,6 +107,8 @@ const AddBooks = () => {
                 ))}
               </select>
             </div>
+
+            {/* AUTHOR */}
             <div className="form-group">
               <label htmlFor="authorField">Author:</label>
               <input
@@ -115,16 +122,19 @@ const AddBooks = () => {
                 required
               />
             </div>
+
+            {/* CONDITION */}
             <div className="form-group">
               <label htmlFor="conditionField">Condition:</label>
               <select
                 className="form-control"
                 id="conditionField"
                 name="condition"
-                value={product.condition || "New"}
+                value={product.condition || ""}
                 onChange={handleChange}
                 required
               >
+                <option value="">Choose a condition</option>
                 {condition.map((condition) => (
                   <option key={condition} value={condition}>
                     {condition}
@@ -132,20 +142,24 @@ const AddBooks = () => {
                 ))}
               </select>
             </div>
+
+            {/* PRICE */}
             <div className="form-group">
-  <label htmlFor="priceField">Price:</label>
-  <input
-    type="number"
-    className="form-control"
-    id="priceField"
-    placeholder="Enter the Price"
-    name="price"
-    value={product.price || 0}
-    onChange={handleChange}
-    min={0} // Set the minimum value to 0
-    required
-  />
-</div>
+              <label htmlFor="priceField">Price:</label>
+              <input
+                type="number"
+                className="form-control"
+                id="priceField"
+                placeholder="Enter the Price"
+                name="price"
+                value={product.price || 0}
+                onChange={handleChange}
+                min={0} // Set the minimum value to 0
+                required
+              />
+            </div>
+
+            {/* DESCRIPTION */}
             <div className="form-group">
               <label htmlFor="descriptionField">Description:</label>
               <textarea
@@ -158,11 +172,15 @@ const AddBooks = () => {
                 required
               ></textarea>
             </div>
+
+            {/* SUBMIT BUTTON */}
             <button className="btn btn-primary" type="submit">
               <i className="fas fa-edit"></i>
               Submit
             </button>
-            <Link to="/books/list" className="btn btn-warning">
+
+            {/* CANCEL BUTTON */}
+            <Link to="/books/get" className="btn btn-warning">
               <i className="fas fa-undo"></i>
               Cancel
             </Link>
