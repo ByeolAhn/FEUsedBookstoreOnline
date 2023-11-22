@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../datasource/api-books";
 import BookModel from "../../datasource/booksModel";
@@ -22,12 +22,13 @@ const categories = [
   "Cooking",
   "Travel",
   "Poetry",
+  "Fashion",
 ];
 
 const AddBooks = () => {
   let navigate = useNavigate();
   let [product, setProduct] = useState(
-    new BookModel("", "", "", "", "", 0, "")
+    new BookModel("", "", "", "", "", 0, "", "") // Adding an empty string for bookName
   );
 
   const handleChange = (event) => {
@@ -47,6 +48,7 @@ const AddBooks = () => {
       condition: product.condition,
       price: product.price,
       description: product.description,
+      bookName: product.bookName, // Include the bookName in the submitted data
     };
 
     create(newProduct)
@@ -72,7 +74,7 @@ const AddBooks = () => {
 
           <form onSubmit={handleSubmit} className="form">
             <div className="form-group">
-              <input type="hidden" name="id" value={product.id || ""}></input>
+              <input type="hidden" name="id" value={product.id || ""} />
 
               {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>
@@ -83,6 +85,21 @@ const AddBooks = () => {
                 placeholder="Enter the ISBN"
                 name="isbn"
                 value={product.isbn || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Book Name */}
+            <div className="form-group">
+              <label htmlFor="bookNameField">Book Name:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="bookNameField"
+                placeholder="Enter the book name"
+                name="bookName"
+                value={product.bookName || ""}
                 onChange={handleChange}
                 required
               />
@@ -175,9 +192,9 @@ const AddBooks = () => {
 
             {/* SUBMIT BUTTON */}
             <button className="btn btn-primary" type="submit">
-              <i className="fas fa-edit"></i>
-              Submit
-            </button>
+  <i className="fas fa-edit"></i>
+  Submit
+</button>
 
             {/* CANCEL BUTTON */}
             <Link to="/books/get" className="btn btn-warning">

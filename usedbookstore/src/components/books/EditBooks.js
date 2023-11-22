@@ -21,15 +21,16 @@ const categories = [
   "Cooking",
   "Travel",
   "Poetry",
+  "Fashion",
 ];
 
 const EditBooks = () => {
   let navigate = useNavigate();
-  let { isbn } = useParams();
+  let { id } = useParams();
   let [product, setProduct] = useState(new BooksModel());
 
   useEffect(() => {
-    read(isbn)
+    read(id)
       .then((data) => {
         if (data) {
           setProduct(
@@ -50,12 +51,14 @@ const EditBooks = () => {
         alert(err.message);
         console.log(err);
       });
-  }, []);
+  }, [id]);
+
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -69,31 +72,34 @@ const EditBooks = () => {
       price: product.price,
       description: product.description,
     };
-
-    update(isbn, newProduct)
+  
+    update(id, newProduct)
       .then((data) => {
         if (data && data.success) {
           alert(data.message);
           navigate("/books/get");
         } else {
-          alert(data.message);
+          if (data && data.message) {
+            alert(data.message);
+          } else {
+            alert("Failed to update book."); // Show a generic error message
+          }
         }
       })
       .catch((err) => {
-        alert(err.message);
+        alert(err.message); // Show any error caught during the API call
         console.log(err);
       });
   };
+return (
+  <div className="container" style={{ paddingTop: 80 }}>
+    <div className="row">
+      <div className="offset-md-3 col-md-6">
+        <h1>Add a new Book</h1>
 
-  return (
-    <div className="container" style={{ paddingTop: 80 }}>
-      <div className="row">
-        <div className="offset-md-3 col-md-6">
-          <h1>Add a new Book</h1>
-
-          <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form">
             <div className="form-group">
-              <input type="hidden" name="id" value={product.id || ""}></input>
+            <input type="hidden" name="id" value={product.id || ""} />
 
               {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>

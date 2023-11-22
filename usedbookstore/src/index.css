@@ -76,3 +76,19 @@ footer {
 .btn-add-book:hover {
   background-color: #0056b3;
 }
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.category {
+  flex-basis: calc(33.33% - 20px); /* Adjust the width as needed */
+  margin-bottom: 20px;
+}
+
+.category img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}

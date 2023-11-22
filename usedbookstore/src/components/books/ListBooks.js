@@ -1,128 +1,89 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { list, remove } from "../../datasource/api-books";
+
 const ListBooks = () => {
-  let [bookList, setBookList] = useState([]);
-  let [isLoading, setIsLoading] = useState(true);
+  const [productList, setProductList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     list()
       .then((data) => {
-        if (data) {
-          setBookList(data);
-          setIsLoading(false);
-        }
+        setProductList(data || []); // Set to an empty array if data is undefined
+        setIsLoading(false);
       })
       .catch((err) => {
-        alert(err.message);
-        console.log(err);
+        console.error(err);
+        setIsLoading(false);
       });
   }, []);
 
   const handleRemove = (isbn) => {
-    // if (!isAuthenticated())
-    //     window.alert('You are not authenticated. Please, proceed with sign-in first.')
-    // else
-    if (window.confirm("Are you sure you want to delete this item?")) {
+    if (window.confirm("Are you sure you want to delete this Book?")) {
       remove(isbn)
-        .then((data) => {
-          if (data && data.success) {
-            const newList = bookList.filter((product) => product.isbn !== isbn);
-            setBookList(newList);
-          }
+        .then(() => {
+          setProductList((prevProductList) =>
+            prevProductList.filter((product) => product.isbn !== isbn)
+          );
         })
         .catch((err) => {
-          alert(err.message);
-          console.log(err);
+          console.error(err);
         });
     }
   };
-
   return (
-    //   -- Main Content --
-    <main className="container" style={{ paddingTop: 80 }}>
+    <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
-        <h1>Book List</h1>
-
+        <h1>Product List</h1>
         <div>
-          <Link
-            to="/books/create"
-            className="btn btn-primary align-self-end"
-            role="button"
-          >
-            <i className="fas fa-plus-circle"></i>
-            Add a new Book
+          <Link to="/books/create" className="btn btn-primary">
+            Add a new Product
           </Link>
         </div>
-        <br />
-        <br />
+
         <div className="table-responsive">
-          {isLoading && <div>Loading...</div>}
-          {!isLoading && (
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
             <table className="table table-bordered table-striped table-hover">
               <thead>
-                {/* -- Header Row-- */}
                 <tr>
-                  <th className="text-center">Isbn</th>
-                  <th className="text-center">Category</th>
-                  <th className="text-center">Title</th>
-                  <th className="text-center">Author</th>
-                  <th className="text-center">Condition</th>
-                  <th className="text-center">Price</th>
-                  <th className="text-center">Description</th>
-                  <th className="text-center" colSpan="3">
-                    Actions
-                  </th>
+                  <th>ISBN</th>
+                  <th>Category</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Condition</th>
+                  <th>Price</th>
+                  <th>Description</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {/* -- Repeatable Template Row -- */}
-                {bookList.map((product, i) => {
-                  return (
-                    <tr key={i}>
-                      <td className="text-center"> {product.isbn || ""} </td>
-                      <td className="text-center">
-                        {" "}
-                        {product.category || ""}{" "}
-                      </td>
-                      <td className="text-center"> {product.title || ""} </td>
-                      <td className="text-center"> {product.author || ""} </td>
-                      <td className="text-center">
-                        {" "}
-                        {product.condition || ""}{" "}
-                      </td>
-                      <td className="text-center"> {product.price || ""} </td>
-                      <td className="text-center">
-                        {" "}
-                        {product.description || ""}{" "}
-                      </td>
-
-                      <td className="text-center">
-                        <Link
-                          className="btn bg-primary btn-primary btn-sm"
-                          to={"/books/update/" + product.isbn}
-                        >
-                          <i className="fas fa-pencil-alt"></i>
-                        </Link>
-                      </td>
-
-                      <td className="text-center">
-                        <button
-                          className="btn bg-danger btn-danger btn-sm"
-                          onClick={() => handleRemove(product.isbn)}
-                        >
-                          <i className="fas fa-trash-alt"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {productList && productList.map((product, index) => (
+                  <tr key={index}>
+                    <td>{product.isbn}</td>
+                    <td>{product.category}</td>
+                    <td>{product.title}</td>
+                    <td>{product.author}</td>
+                    <td>{product.condition}</td>
+                    <td>{product.price}</td>
+                    <td>{product.description}</td>
+                    <td>
+                      <Link to={`/books/update/${product.isbn}`} className="btn btn-primary btn-sm">
+                      <i className="fas fa-pencil-alt"></i>
+                      </Link>
+                      <button onClick={() => handleRemove(product.isbn)} className="btn btn-danger btn-sm">
+                      <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 
