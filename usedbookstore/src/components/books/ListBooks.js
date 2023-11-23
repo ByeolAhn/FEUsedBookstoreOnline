@@ -34,7 +34,7 @@ const ListBooks = () => {
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
-        <h1>Book Inventry</h1>
+        <h1>Book Inventory</h1>
         <div>
           <Link to="/books/create" className="btn btn-primary">
             Add a new Book
@@ -59,35 +59,42 @@ const ListBooks = () => {
                 </tr>
               </thead>
               <tbody>
-                {productList && productList.map((product, index) => (
-                  <tr key={index}>
-                    <td>{product.isbn}</td>
-                    <td>{product.category}</td>
-                    <td>{product.title}</td>
-                    <td>{product.author}</td>
-                    <td>{product.condition}</td>
-                    <td>{product.price}</td>
-                    <td>{product.description}</td>
-                    <td>
-                    <table className="table">
-            <tbody>
-              <tr>
-                <td>
-                <Link to={`/books/update/${product.isbn}`} className="btn btn-primary btn-sm">
-                      <i className="fas fa-pencil-alt"></i>
-                      </Link>
-                </td>
-                <td>
-                <button onClick={() => handleRemove(product.isbn)} className="btn btn-danger btn-sm">
-                      <i className="fas fa-trash-alt"></i>
-                      </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>           
-                    </td>
-                  </tr>
-                ))}
+                {productList &&
+                  productList.map((product, index) => (
+                    <tr key={index}>
+                      <td>{product.isbn}</td>
+                      <td>{product.category}</td>
+                      <td>{product.title}</td>
+                      <td>{product.author}</td>
+                      <td>{product.condition}</td>
+                      <td>{product.price}</td>
+                      <td>{product.description}</td>
+                      <td>
+                        <table className="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <Link
+                                  to={`/books/update/${product.isbn}`}
+                                  className="btn btn-primary btn-sm"
+                                >
+                                  <i className="fas fa-pencil-alt"></i>
+                                </Link>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() => handleRemove(product.isbn)}
+                                  className="btn btn-danger btn-sm"
+                                >
+                                  <i className="fas fa-trash-alt"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}

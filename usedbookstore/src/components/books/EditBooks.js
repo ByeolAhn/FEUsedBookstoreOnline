@@ -38,7 +38,6 @@ const EditBooks = () => {
         console.log("Logging data", data);
         if (data) {
           setProduct(
-
             new BooksModel(
               data.id,
               data.isbn,
@@ -57,7 +56,6 @@ const EditBooks = () => {
         console.log(err);
       });
   }, [isbn]);
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -92,16 +90,20 @@ const EditBooks = () => {
         console.log(err);
       });
   };
-  
-return (
-  <div className="container" style={{ paddingTop: 80 }}>
-    <div className="row">
-      <div className="offset-md-3 col-md-6">
-        <h1 style={{ paddingTop: 40 }}>Edit Book Content:</h1>
 
-        <form onSubmit={handleSubmit} className="form" style={{ paddingTop: 40 }}>
+  return (
+    <div className="container" style={{ paddingTop: 80 }}>
+      <div className="row">
+        <div className="offset-md-3 col-md-6">
+          <h1 style={{ paddingTop: 40 }}>Edit A Book:</h1>
+
+          <form
+            onSubmit={handleSubmit}
+            className="form"
+            style={{ paddingTop: 40 }}
+          >
             <div className="form-group">
-            <input type="hidden" name="id" value={product.id || ""} />
+              <input type="hidden" name="id" value={product.id || ""} />
 
               {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>

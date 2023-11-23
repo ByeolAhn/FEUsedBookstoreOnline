@@ -4,9 +4,11 @@ const Footer = () => {
       <br />
       <br />
       <br />
-      <footer>
-        <p className="text-muted text-center">
-          &copy;&nbsp;Copyright | Algorithm Avengers | COMP229 Web Application
+      <footer
+        style={{ backgroundColor: "black", color: "white", fontSize: "18px" }}
+      >
+        <p className="text-center">
+          &copy; Copyright | Algorithm Avengers | Group 6
         </p>
       </footer>
     </div>

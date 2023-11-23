@@ -4,10 +4,10 @@ html {
 }
 body {
   font: "Lucida Grande", Helvetica, Arial, sans-serif;
-  padding-bottom:20px;
+  padding-bottom: 20px;
 }
 h1 {
-  color: #00B7FF;
+  color: #00b7ff;
 }
 footer {
   position: fixed;
@@ -19,7 +19,7 @@ footer {
   text-align: center;
   font-size: small;
 }
-.flash{
+.flash {
   color: red;
 }
 

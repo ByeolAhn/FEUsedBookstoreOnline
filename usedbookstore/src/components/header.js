@@ -1,7 +1,7 @@
-import React from 'react';
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom';
-import image_logo from '../assets/logo.png';
-import { isAuthenticated, getUsername, clearJWT } from './auth/auth-helper';
+import React from "react";
+import { Outlet, NavLink, Link, useLocation } from "react-router-dom";
+import image_logo from "../assets/logo.png";
+import { isAuthenticated, getUsername, clearJWT } from "./auth/auth-helper";
 
 const Header = () => {
   const location = useLocation();
@@ -17,7 +17,11 @@ const Header = () => {
         <div className="container-fluid">
           {/* -- Brand/logo -- */}
           <NavLink className="navbar-brand" to="#">
-            <img src={image_logo} alt="logo" style={{ width: 40 , borderRadius: '50%' }} />
+            <img
+              src={image_logo}
+              alt="logo"
+              style={{ width: 40, borderRadius: "50%" }}
+            />
           </NavLink>
           <button
             className="navbar-toggler"
@@ -28,35 +32,39 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          <div className="collapse navbar-collapse" id="collapsibleNavbar"  >
+          <div className="collapse navbar-collapse" id="collapsibleNavbar">
             {/* !-- Links -- */}
             <ul className="navbar-nav me-auto mb-2 mb-sm-0">
               {/* Centered Navigation Items */}
               <li className="nav-item">
-                <NavLink className="nav-link" to="/" >
-                  <i className="fas fa-home"></i> Home 
+                <NavLink className="nav-link" to="/">
+                  <i className="fas fa-home"></i> Home
                 </NavLink>
               </li>
               <li className="nav-item">
                 <NavLink className="nav-link" to="/books/create">
-                  <i className="fas fa-exchange-alt"></i> Trade Your Books
+                  <i className="fas fa-exchange-alt"></i> Trade Books
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/about">
-                  <i className="fas fa-info-circle"></i> About Us
-                </NavLink>
-              </li>
-              <li className="nav-item">
-              <NavLink className="nav-link" to="/contact">
-               <i className="fas fa-envelope"></i> Contact Us
-               </NavLink>
-                 </li>
+
               <li className="nav-item">
                 <NavLink className="nav-link" to="/books/get">
                   <i className="fas fa-book"></i> Explore Books
                 </NavLink>
               </li>
+
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/about">
+                  <i className="fas fa-info-circle"></i> About Us
+                </NavLink>
+              </li>
+
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/contact">
+                  <i className="fas fa-envelope"></i> Contact Us
+                </NavLink>
+              </li>
+
               {/* End of Centered Navigation Items */}
             </ul>
             {/* Aligned to the Right */}
@@ -74,7 +82,8 @@ const Header = () => {
                 )}
                 {isAuthenticated() && (
                   <Link className="nav-link" to="/" onClick={signoutClick}>
-                    <i className="fa-solid fa-right-from-bracket"></i> Sign-out ({getUsername()})
+                    <i className="fa-solid fa-right-from-bracket"></i> Sign-out
+                    ({getUsername()})
                   </Link>
                 )}
               </li>

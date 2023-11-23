@@ -1,5 +1,8 @@
 /* addBookStyles.css */
 
+body {
+  background-color: rgb(175, 182, 189);
+}
 /* Add Book Container */
 .add-book-container {
   max-width: 500px;
