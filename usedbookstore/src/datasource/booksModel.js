@@ -1,4 +1,4 @@
-class booksModel {
+class BookModel {
   constructor(
     id,
     isbn,
@@ -19,4 +19,4 @@ class booksModel {
     this.description = description;
   }
 }
-export default booksModel;
+export default BookModel;

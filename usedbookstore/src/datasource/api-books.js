@@ -31,7 +31,6 @@ const list = async () => {
   }
 };
 
-
 const read = async (isbn) => {
   try {
     let response = await fetch(apiURL + "/books/get/" + isbn, {
@@ -48,7 +47,8 @@ const read = async (isbn) => {
 
     return await response.json();
   } catch (err) {
-    const errorMessage = err?.message || 'An error occurred while fetching book data.';
+    const errorMessage =
+      err?.message || "An error occurred while fetching book data.";
     console.log(errorMessage);
     throw new Error(errorMessage);
   }
@@ -64,13 +64,12 @@ const update = async (isbn, item) => {
         // 'Authorization': 'Bearer ' + credentials
       },
       body: JSON.stringify(item),
-    })
-    return await response.json()
+    });
+    return await response.json();
   } catch (err) {
-      console.log(err)
+    console.log(err);
   }
-}
-
+};
 
 const remove = async (isbn) => {
   try {
