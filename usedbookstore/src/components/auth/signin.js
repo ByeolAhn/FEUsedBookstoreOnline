@@ -1,15 +1,14 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react"
+import { useState } from "react";
 import { signin } from "../../datasource/api-user";
 import { authenticate } from './auth-helper.js';
 
-const Signin = () =>{
+const Signin = () => {
     const { state } = useLocation();
     const { from } = state || { from: { pathname: '/' } };
-
     let navigate = useNavigate();
     
-    const [errorMsg, setErrorMsg] = useState('')
+    const [errorMsg, setErrorMsg] = useState('');
     const [user, setUser] = useState({
         email: '',
         password: ''
@@ -17,7 +16,7 @@ const Signin = () =>{
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
+        setUser(prevFormData => ({ ...prevFormData, [name]: value }));
     };
 
     const handleSubmit = (event) => {
@@ -26,64 +25,66 @@ const Signin = () =>{
         signin(user).then((data) => {
             if (data && data.success) {
                 authenticate(data.token, () => {
-                    navigate(from, {replace: true});
+                    navigate(from, { replace: true });
                 });
-            }
-            else {
+            } else {
                 setErrorMsg(data.message);
             }
         }).catch(err => {
             setErrorMsg(err.message);
-            console.log(err)
+            console.log(err);
         });
     };
 
     return (
-        // -- Content for the Add_Edit page --
         <div className="container" style={{ paddingTop: 80 }}>
             <div className="row">
                 <div className="offset-md-3 col-md-6">
-                    <h1>Signin</h1>
-                    <p className="flash"><span>{errorMsg}</span></p>
+                    <h1>Sign In</h1>
+                    {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
                     <form onSubmit={handleSubmit} className="form">
                         <div className="form-group">
                             <label htmlFor="emailTextField">Email</label>
-                            <input type="text" className="form-control"
+                            <input
+                                type="email"  // Changed from "text" to "email"
+                                className="form-control"
                                 id="emailTextField"
                                 placeholder="Enter your email"
                                 name="email"
                                 value={user.email || ''}
                                 onChange={handleChange}
-                                required>
-                            </input>
+                                required
+                            />
                         </div>
                         <br />
                         <div className="form-group">
-                            <label htmlFor="passowordTextField">Password</label>
-                            <input type="password" className="form-control"
-                                id="passowordTextField"
-                                placeholder=""
+                            <label htmlFor="passwordTextField">Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="passwordTextField"
+                                placeholder="Enter your password"
                                 name="password"
                                 value={user.password || ''}
                                 onChange={handleChange}
-                                required>
-                            </input>
+                                required
+                            />
                         </div>
                         <br />
 
                         <button className="btn btn-primary" type="submit">
-                            <i className="fas fa-edit"></i>
-                            Submit
+                            <i className="fas fa-sign-in-alt"></i> Sign In
                         </button>
 
-                        <Link href="#" to="/books/get" className="btn btn-warning">
-                            <i className="fas fa-undo"></i>
-                            Cancel
+                        <Link to="/auth/Registration" className="btn btn-link">
+                            Don't have an account? Register here
                         </Link>
 
+                        <Link to="/books/get" className="btn btn-warning">
+                            <i className="fas fa-undo"></i> Cancel
+                        </Link>
                     </form>
                 </div>
-
             </div>
         </div>
     );

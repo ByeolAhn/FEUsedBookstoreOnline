@@ -15,6 +15,8 @@ import AddBooks from "./components/books/AddBooks";
 import EditBooks from "./components/books/EditBooks";
 import ListBooks from "./components/books/ListBooks";
 import Footer from "./components/books/Footer";
+import Signin from "./components/auth/signin";
+import Registration from "./components/auth/Registration";
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
           <Route path="/books/get" element={<ListBooks />} /> 
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
+       <Route path ="/users/signin" element ={<Signin/>} />
+       <Route path = "/auth/Registration" element={<Registration />} />
         </Route>
       </Routes>
       <Footer />
@@ -37,6 +41,4 @@ export default function App() {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+
