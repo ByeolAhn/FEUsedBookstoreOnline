@@ -33,7 +33,7 @@ const list = async () => {
 
 const read = async (isbn) => {
   try {
-    let response = await fetch(apiURL + "/books/get/" + isbn, {
+    let response = await fetch(apiURL + "/books/find/" + isbn, {
       method: "GET",
       headers: {
         Accept: "application/json",

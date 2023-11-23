@@ -34,10 +34,10 @@ const ListBooks = () => {
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
-        <h1>Product List</h1>
+        <h1>Book Inventry</h1>
         <div>
           <Link to="/books/create" className="btn btn-primary">
-            Add a new Product
+            Add a new Book
           </Link>
         </div>
 
@@ -53,7 +53,7 @@ const ListBooks = () => {
                   <th>Title</th>
                   <th>Author</th>
                   <th>Condition</th>
-                  <th>Price</th>
+                  <th>Price &nbsp;(CAD)&nbsp;</th>
                   <th>Description</th>
                   <th>Actions</th>
                 </tr>
@@ -69,12 +69,22 @@ const ListBooks = () => {
                     <td>{product.price}</td>
                     <td>{product.description}</td>
                     <td>
-                      <Link to={`/books/update/${product.isbn}`} className="btn btn-primary btn-sm">
+                    <table className="table">
+            <tbody>
+              <tr>
+                <td>
+                <Link to={`/books/update/${product.isbn}`} className="btn btn-primary btn-sm">
                       <i className="fas fa-pencil-alt"></i>
                       </Link>
-                      <button onClick={() => handleRemove(product.isbn)} className="btn btn-danger btn-sm">
+                </td>
+                <td>
+                <button onClick={() => handleRemove(product.isbn)} className="btn btn-danger btn-sm">
                       <i className="fas fa-trash-alt"></i>
                       </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>           
                     </td>
                   </tr>
                 ))}

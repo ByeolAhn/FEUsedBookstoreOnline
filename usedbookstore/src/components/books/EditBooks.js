@@ -22,18 +22,23 @@ const categories = [
   "Travel",
   "Poetry",
   "Fashion",
+  "Nursing",
 ];
 
 const EditBooks = () => {
   let navigate = useNavigate();
-  let { id } = useParams();
+  console.log("useParams", useParams());
+  let { isbn } = useParams();
+
   let [product, setProduct] = useState(new BooksModel());
 
   useEffect(() => {
-    read(id)
+    read(isbn)
       .then((data) => {
+        console.log("Logging data", data);
         if (data) {
           setProduct(
+
             new BooksModel(
               data.id,
               data.isbn,
@@ -51,7 +56,7 @@ const EditBooks = () => {
         alert(err.message);
         console.log(err);
       });
-  }, [id]);
+  }, [isbn]);
 
 
   const handleChange = (event) => {
@@ -59,10 +64,10 @@ const EditBooks = () => {
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    let newProduct = {
+
+    const newProduct = {
       id: product.id,
       isbn: product.isbn,
       category: product.category,
@@ -72,32 +77,29 @@ const EditBooks = () => {
       price: product.price,
       description: product.description,
     };
-  
-    update(id, newProduct)
+
+    update(isbn, newProduct)
       .then((data) => {
         if (data && data.success) {
           alert(data.message);
           navigate("/books/get");
         } else {
-          if (data && data.message) {
-            alert(data.message);
-          } else {
-            alert("Failed to update book."); // Show a generic error message
-          }
+          alert(data && data.message ? data.message : "Failed to update book.");
         }
       })
       .catch((err) => {
-        alert(err.message); // Show any error caught during the API call
+        alert(err.message);
         console.log(err);
       });
   };
+  
 return (
   <div className="container" style={{ paddingTop: 80 }}>
     <div className="row">
       <div className="offset-md-3 col-md-6">
-        <h1>Add a new Book</h1>
+        <h1 style={{ paddingTop: 40 }}>Edit Book Content:</h1>
 
-        <form onSubmit={handleSubmit} className="form">
+        <form onSubmit={handleSubmit} className="form" style={{ paddingTop: 40 }}>
             <div className="form-group">
             <input type="hidden" name="id" value={product.id || ""} />
 

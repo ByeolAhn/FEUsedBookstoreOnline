@@ -6,6 +6,8 @@ import "./addBookStyles.css";
 
 const condition = ["New", "Like new", "Used", "Worn"];
 
+
+
 // Predefined list of categories
 const categories = [
   "Fiction",
@@ -22,6 +24,8 @@ const categories = [
   "Cooking",
   "Travel",
   "Poetry",
+  "Fashion",
+  "Nursing",
 ];
 
 const AddBooks = () => {
@@ -30,16 +34,24 @@ const AddBooks = () => {
     new BookModel("", "", "", "", "", 0, "")
   );
 
+  const formatPrice = (price) => {
+    const parsedPrice = parseFloat(price);
+    if (!isNaN(parsedPrice)) {
+      return parsedPrice.toFixed(2);
+    }
+    return "";
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
+    const formattedValue = name === "price" ? formatPrice(value) : value;
+    setProduct((prevFormData) => ({ ...prevFormData, [name]: formattedValue }));
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     let newProduct = {
-      id: product.id,
       isbn: product.isbn,
       category: product.category,
       title: product.title,
@@ -62,19 +74,16 @@ const AddBooks = () => {
         alert(err.message);
         console.log(err);
       });
-  };
-
-  return (
+  };return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
         <div className="offset-md-3 col-md-6">
-          <h1>Add a new Book</h1>
-
-          <form onSubmit={handleSubmit} className="form">
+          <h1 style={{ paddingTop: 40 }}>Add a Book:</h1>
+  
+          <form onSubmit={handleSubmit} className="form" style={{ paddingTop: 40 }}>
+            {/* ISBN */}
             <div className="form-group">
               <input type="hidden" name="id" value={product.id || ""}></input>
-
-              {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>
               <input
                 type="text"
@@ -87,7 +96,22 @@ const AddBooks = () => {
                 required
               />
             </div>
-
+  
+            {/* TITLE */}
+            <div className="form-group">
+              <label htmlFor="titleField">Book Title:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="titleField"
+                placeholder="Enter the title of the book"
+                name="title"
+                value={product.title || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+  
             {/* CATEGORY */}
             <div className="form-group">
               <label htmlFor="categoryField">Category:</label>
@@ -107,7 +131,7 @@ const AddBooks = () => {
                 ))}
               </select>
             </div>
-
+  
             {/* AUTHOR */}
             <div className="form-group">
               <label htmlFor="authorField">Author:</label>
@@ -122,7 +146,7 @@ const AddBooks = () => {
                 required
               />
             </div>
-
+  
             {/* CONDITION */}
             <div className="form-group">
               <label htmlFor="conditionField">Condition:</label>
@@ -142,23 +166,24 @@ const AddBooks = () => {
                 ))}
               </select>
             </div>
-
-            {/* PRICE */}
+  
+            {/* Rest of your form */}
             <div className="form-group">
-              <label htmlFor="priceField">Price:</label>
-              <input
-                type="number"
-                className="form-control"
-                id="priceField"
-                placeholder="Enter the Price"
-                name="price"
-                value={product.price || 0}
-                onChange={handleChange}
-                min={0} // Set the minimum value to 0
-                required
-              />
-            </div>
-
+  <label htmlFor="priceField">Price:</label>
+  <input
+    type="text"
+    className="form-control"
+    id="priceField"
+    placeholder="Enter the Price (e.g., 19.99)"
+    name="price"
+    value={product.price || ''}
+    onChange={handleChange}
+    pattern="^\d+(\.\d{1,2})?$" // Validates up to two decimal places
+    title="Enter a valid price (e.g., 19.99)"
+    required
+  />
+</div>
+  
             {/* DESCRIPTION */}
             <div className="form-group">
               <label htmlFor="descriptionField">Description:</label>
@@ -172,14 +197,12 @@ const AddBooks = () => {
                 required
               ></textarea>
             </div>
-
-            {/* SUBMIT BUTTON */}
+  
             <button className="btn btn-primary" type="submit">
               <i className="fas fa-edit"></i>
               Submit
             </button>
-
-            {/* CANCEL BUTTON */}
+  
             <Link to="/books/" className="btn btn-warning">
               <i className="fas fa-undo"></i>
               Cancel
@@ -189,6 +212,5 @@ const AddBooks = () => {
       </div>
     </div>
   );
-};
-
+                };
 export default AddBooks;
