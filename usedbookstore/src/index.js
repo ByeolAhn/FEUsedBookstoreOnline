@@ -26,11 +26,11 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="books/create" element={<AddBooks />} />
           <Route path="/books/update/:isbn" element={<EditBooks />} />
-          <Route path="/books/get" element={<ListBooks />} /> 
+          <Route path="/books/get" element={<ListBooks />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
-       <Route path ="/users/signin" element ={<Signin/>} />
-       <Route path = "/auth/Registration" element={<Registration />} />
+          <Route path="/users/signin" element={<Signin />} />
+          <Route path="/users/create" element={<Registration />} />
         </Route>
       </Routes>
       <Footer />
@@ -40,5 +40,3 @@ export default function App() {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
-
-

@@ -1,93 +1,95 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { signin } from "../../datasource/api-user";
-import { authenticate } from './auth-helper.js';
+import { authenticate } from "./auth-helper.js";
 
 const Signin = () => {
-    const { state } = useLocation();
-    const { from } = state || { from: { pathname: '/' } };
-    let navigate = useNavigate();
-    
-    const [errorMsg, setErrorMsg] = useState('');
-    const [user, setUser] = useState({
-        email: '',
-        password: ''
-    });
+  const { state } = useLocation();
+  const { from } = state || { from: { pathname: "/" } };
+  let navigate = useNavigate();
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
-        setUser(prevFormData => ({ ...prevFormData, [name]: value }));
-    };
+  const [errorMsg, setErrorMsg] = useState("");
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        signin(user).then((data) => {
-            if (data && data.success) {
-                authenticate(data.token, () => {
-                    navigate(from, { replace: true });
-                });
-            } else {
-                setErrorMsg(data.message);
-            }
-        }).catch(err => {
-            setErrorMsg(err.message);
-            console.log(err);
-        });
-    };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
+  };
 
-    return (
-        <div className="container" style={{ paddingTop: 80 }}>
-            <div className="row">
-                <div className="offset-md-3 col-md-6">
-                    <h1>Sign In</h1>
-                    {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
-                    <form onSubmit={handleSubmit} className="form">
-                        <div className="form-group">
-                            <label htmlFor="emailTextField">Email</label>
-                            <input
-                                type="email"  // Changed from "text" to "email"
-                                className="form-control"
-                                id="emailTextField"
-                                placeholder="Enter your email"
-                                name="email"
-                                value={user.email || ''}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <br />
-                        <div className="form-group">
-                            <label htmlFor="passwordTextField">Password</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="passwordTextField"
-                                placeholder="Enter your password"
-                                name="password"
-                                value={user.password || ''}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                        <br />
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-                        <button className="btn btn-primary" type="submit">
-                            <i className="fas fa-sign-in-alt"></i> Sign In
-                        </button>
+    signin(user)
+      .then((data) => {
+        if (data && data.success) {
+          authenticate(data.token, () => {
+            navigate(from, { replace: true });
+          });
+        } else {
+          setErrorMsg(data.message);
+        }
+      })
+      .catch((err) => {
+        setErrorMsg(err.message);
+        console.log(err);
+      });
+  };
 
-                        <Link to="/auth/Registration" className="btn btn-link">
-                            Don't have an account? Register here
-                        </Link>
-
-                        <Link to="/books/get" className="btn btn-warning">
-                            <i className="fas fa-undo"></i> Cancel
-                        </Link>
-                    </form>
-                </div>
+  return (
+    <div className="container" style={{ paddingTop: 80 }}>
+      <div className="row">
+        <div className="offset-md-3 col-md-6">
+          <h1>Sign In</h1>
+          {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
+          <form onSubmit={handleSubmit} className="form">
+            <div className="form-group">
+              <label htmlFor="emailTextField">Email</label>
+              <input
+                type="email" // Changed from "text" to "email"
+                className="form-control"
+                id="emailTextField"
+                placeholder="Enter your email"
+                name="email"
+                value={user.email || ""}
+                onChange={handleChange}
+                required
+              />
             </div>
+            <br />
+            <div className="form-group">
+              <label htmlFor="passwordTextField">Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="passwordTextField"
+                placeholder="Enter your password"
+                name="password"
+                value={user.password || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <br />
+
+            <button className="btn btn-primary" type="submit">
+              <i className="fas fa-sign-in-alt"></i> Sign In
+            </button>
+
+            <Link to="/" className="btn btn-warning">
+              <i className="fas fa-undo"></i> Cancel
+            </Link>
+            <br />
+            <Link to="/users/create" className="btn btn-link">
+              Don't have an account? Register here
+            </Link>
+          </form>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Signin;

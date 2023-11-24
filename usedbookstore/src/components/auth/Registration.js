@@ -1,45 +1,46 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { register } from "../../datasource/api-user";
+import { authenticate } from "./auth-helper.js";
 
-const Registration = () => {
-  const navigate = useNavigate();
+const Register = () => {
+  const { state } = useLocation();
+  const { from } = state || { from: { pathname: "/" } };
+  let navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  const [errorMsg, setErrorMsg] = useState("");
+  const [user, setUser] = useState({
     username: "",
     email: "",
-    password: ""
+    password: "",
+    role: "",
   });
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value
-    }));
+    setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (formData.password !== confirmPassword) {
-      setErrorMsg("Passwords do not match!");
-      return;
-    }
 
-    try {
-      const response = await axios.post("/api/register", formData);
-      console.log(response.data);
-      navigate("/signin");
-    } catch (error) {
-      console.error(error);
-      setErrorMsg(error.response && error.response.data ? error.response.data.message : "An error occurred during registration.");
-    }
+    register(user)
+      .then((data) => {
+        if (data && data.success) {
+          // Show an alert message upon successful registration
+          window.alert("Registered User Successfully To Our Database");
+
+          authenticate(data.token, () => {
+            navigate(from, { replace: true });
+          });
+        } else {
+          setErrorMsg(data.message);
+        }
+      })
+      .catch((err) => {
+        setErrorMsg(err.message);
+        console.log(err);
+      });
   };
 
   return (
@@ -50,69 +51,66 @@ const Registration = () => {
           {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
           <form onSubmit={handleSubmit} className="form">
             <div className="form-group">
-              <label htmlFor="usernameField">Username</label>
+              <label htmlFor="usernameTextField">Username</label>
               <input
                 type="text"
                 className="form-control"
-                id="usernameField"
+                id="usernameTextField"
                 placeholder="Enter your username"
                 name="username"
-                value={formData.username}
+                value={user.username || ""}
                 onChange={handleChange}
                 required
               />
             </div>
             <br />
             <div className="form-group">
-              <label htmlFor="emailField">Email</label>
+              <label htmlFor="emailTextField">Email</label>
               <input
                 type="email"
                 className="form-control"
-                id="emailField"
+                id="emailTextField"
                 placeholder="Enter your email"
                 name="email"
-                value={formData.email}
+                value={user.email || ""}
                 onChange={handleChange}
                 required
               />
             </div>
             <br />
             <div className="form-group">
-              <label htmlFor="passwordField">Password</label>
+              <label htmlFor="passwordTextField">Password</label>
               <input
                 type="password"
                 className="form-control"
-                id="passwordField"
+                id="passwordTextField"
                 placeholder="Enter your password"
                 name="password"
-                value={formData.password}
+                value={user.password || ""}
                 onChange={handleChange}
                 required
               />
             </div>
             <br />
             <div className="form-group">
-              <label htmlFor="confirmPasswordField">Confirm Password</label>
-              <input
-                type="password"
+              <label htmlFor="roleSelectField">Role</label>
+              <select
                 className="form-control"
-                id="confirmPasswordField"
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
+                id="roleSelectField"
+                name="role"
+                value={user.role || ""}
+                onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Select Role</option>
+                <option value="seller">seller</option>
+                <option value="buyer">buyer</option>
+              </select>
             </div>
             <br />
             <button className="btn btn-primary" type="submit">
-              <i className="fas fa-user-plus"></i>
               Register
             </button>
-       
-            <Link to="/users/signin" className="btn btn-secondary">
-              <i className="fas fa-sign-in-alt"></i>
-              Sign In
-            </Link>
           </form>
         </div>
       </div>
@@ -120,4 +118,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Register;
