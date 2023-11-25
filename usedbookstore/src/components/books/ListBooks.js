@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { list, remove } from "../../datasource/api-books";
+import { isAuthenticated } from "../auth/auth-helper";
 
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
@@ -19,7 +20,9 @@ const ListBooks = () => {
   }, []);
 
   const handleRemove = (isbn) => {
-    if (window.confirm("Are you sure you want to delete this Book?")) {
+    if (!isAuthenticated())     
+      window.alert('You are not authenticated. Please, sign-in first.')
+    else if(window.confirm('Are you sure you want to delete this book?')) {
       remove(isbn)
         .then(() => {
           setProductList((prevProductList) =>

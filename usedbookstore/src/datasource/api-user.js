@@ -1,4 +1,4 @@
-let apiURL = process.env.APIURL || "http://localhost:3000";
+let apiURL = process.env.REACT_APP_APIURL
 
 const signin = async (user) => {
   try {
