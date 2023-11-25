@@ -9,13 +9,14 @@ const Register = () => {
   let navigate = useNavigate();
 
   const [errorMsg, setErrorMsg] = useState("");
+  //Defines a registration form with input fields for username, email, password, and role.
   const [user, setUser] = useState({
     username: "",
     email: "",
     password: "",
     role: "",
   });
-
+//Handles form changes, submission, and displays error messages if registration fails.
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -23,13 +24,13 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    // Utilizes the register function from the api-user module to interact with the backend.
     register(user)
       .then((data) => {
         if (data && data.success) {
-          // Show an alert message upon successful registration
+          
           window.alert("Registered User Successfully To Our Database");
-
+          //Upon successful registration, alerts the user and triggers authentication.
           authenticate(data.token, () => {
             navigate(from, { replace: true });
           });

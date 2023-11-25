@@ -3,6 +3,8 @@ import { useState } from "react";
 import { signin } from "../../datasource/api-user";
 import { authenticate } from "./auth-helper.js";
 
+
+//Defines a sign-in form with input fields for email and password.
 const Signin = () => {
   const { state } = useLocation();
   const { from } = state || { from: { pathname: "/" } };
@@ -14,6 +16,7 @@ const Signin = () => {
     password: "",
   });
 
+  //Handles form changes, submission, and displays error messages if sign-in fails.
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -21,7 +24,7 @@ const Signin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  //Utilizes the signin function from the api-user module to interact with the backend.
     signin(user)
       .then((data) => {
         if (data && data.success) {
@@ -36,7 +39,7 @@ const Signin = () => {
         setErrorMsg(err.message);
         console.log(err);
       });
-  };
+  }; 
 
   return (
     <div className="container" style={{ paddingTop: 80 }}>
