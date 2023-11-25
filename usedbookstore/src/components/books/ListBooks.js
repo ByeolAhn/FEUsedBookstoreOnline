@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { list, remove } from "../../datasource/api-books";
 import { isAuthenticated } from "../auth/auth-helper";
-
+// Functional component definition for listing books
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  // useEffect hook to fetch the list of books when the component mounts
   useEffect(() => {
     list()
       .then((data) => {
@@ -18,7 +18,7 @@ const ListBooks = () => {
         setIsLoading(false);
       });
   }, []);
-
+ // to handle book removal
   const handleRemove = (isbn) => {
     if (!isAuthenticated())     
       window.alert('You are not authenticated. Please, sign-in first.')

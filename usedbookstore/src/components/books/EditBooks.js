@@ -25,6 +25,7 @@ const categories = [
   "Nursing",
 ];
 
+// Functional component for editing book details
 const EditBooks = () => {
   let navigate = useNavigate();
   console.log("useParams", useParams());
@@ -32,6 +33,7 @@ const EditBooks = () => {
 
   let [product, setProduct] = useState(new BooksModel());
 
+  // Fetching book details based on ISBN when the component mounts
   useEffect(() => {
     read(isbn)
       .then((data) => {
@@ -56,12 +58,12 @@ const EditBooks = () => {
         console.log(err);
       });
   }, [isbn]);
-
+  // Handling changes in form fields
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
-
+  // Handling form submission to update book details
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -75,7 +77,7 @@ const EditBooks = () => {
       price: product.price,
       description: product.description,
     };
-
+    // Invoking the update API function
     update(isbn, newProduct)
       .then((data) => {
         if (data && data.success) {

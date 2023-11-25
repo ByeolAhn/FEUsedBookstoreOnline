@@ -4,6 +4,7 @@ import { create } from "../../datasource/api-books";
 import BookModel from "../../datasource/booksModel";
 import "./addBookStyles.css";
 
+// Predefined list of categories for books
 const condition = ["New", "Like new", "Used", "Worn"];
 
 // Predefined list of categories for books
@@ -26,20 +27,22 @@ const categories = [
   "Nursing",
 ];
 
+//Functional component for adding books
 const AddBooks = () => {
   let navigate = useNavigate();
   let [product, setProduct] = useState(
     new BookModel("", "", "", "", "", 0, "")
   );
 
+//Event handler to update the state on form input change
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
-
+//Event handler for form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    // Extract relevant book details from the state
     let newProduct = {
       isbn: product.isbn,
       category: product.category,
@@ -49,7 +52,7 @@ const AddBooks = () => {
       price: product.price,
       description: product.description,
     };
-
+    // Invokes the API function to add a new book.
     create(newProduct)
       .then((data) => {
         if (data && data.id) {
