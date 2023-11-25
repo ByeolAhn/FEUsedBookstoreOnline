@@ -42,8 +42,8 @@ const AddBooks = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const formattedValue = name === "price" ? formatPrice(value) : value;
-    setProduct((prevFormData) => ({ ...prevFormData, [name]: formattedValue }));
+    
+    setProduct((prevFormData) => ({ ...prevFormData, [name]: Value }));
   };
 
   const handleSubmit = (event) => {
@@ -170,19 +170,17 @@ const AddBooks = () => {
               </select>
             </div>
 
-            {/* Rest of your form */}
+            {/* PRICE */}
             <div className="form-group">
               <label htmlFor="priceField">Price:</label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 id="priceField"
                 placeholder="Enter the Price (e.g., 19.99)"
                 name="price"
-                value={product.price || ""}
+                value={product.price || 0}
                 onChange={handleChange}
-                pattern="^\d+(\.\d{1,2})?$" // Validates up to two decimal places
-                title="Enter a valid price (e.g., 19.99)"
                 required
               />
             </div>
