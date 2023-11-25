@@ -14,7 +14,7 @@ import "@fortawesome/fontawesome-free/js/all.min.js";
 import AddBooks from "./components/books/AddBooks";
 import EditBooks from "./components/books/EditBooks";
 import ListBooks from "./components/books/ListBooks";
-import Footer from "./components/books/Footer";
+import Footer from "./components/Footer";
 import Signin from "./components/auth/signin";
 import Registration from "./components/auth/Registration";
 
