@@ -17,6 +17,7 @@ import ListBooks from "./components/books/ListBooks";
 import Footer from "./components/Footer";
 import Signin from "./components/auth/signin";
 import Registration from "./components/auth/Registration";
+import PrivateRoute from "./components/auth/PrivateRoute";
 
 export default function App() {
   return (
@@ -24,8 +25,14 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route path="books/create" element={<AddBooks />} />
-          <Route path="/books/update/:isbn" element={<EditBooks />} />
+          <Route path="books/create" element={
+          <PrivateRoute>
+            <AddBooks /> 
+          </PrivateRoute>} />
+          <Route path="/books/update/:isbn" element={
+          <PrivateRoute>
+            <EditBooks />
+          </PrivateRoute>} />
           <Route path="/books/get" element={<ListBooks />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
