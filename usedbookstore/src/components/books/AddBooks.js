@@ -32,18 +32,9 @@ const AddBooks = () => {
     new BookModel("", "", "", "", "", 0, "")
   );
 
-  const formatPrice = (price) => {
-    const parsedPrice = parseFloat(price);
-    if (!isNaN(parsedPrice)) {
-      return parsedPrice.toFixed(2);
-    }
-    return "";
-  };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const formattedValue = name === "price" ? formatPrice(value) : value;
-    setProduct((prevFormData) => ({ ...prevFormData, [name]: formattedValue }));
+    setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
   const handleSubmit = (event) => {
@@ -170,19 +161,18 @@ const AddBooks = () => {
               </select>
             </div>
 
-            {/* Rest of your form */}
+            {/* PRICE */}
             <div className="form-group">
               <label htmlFor="priceField">Price:</label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
                 id="priceField"
                 placeholder="Enter the Price (e.g., 19.99)"
                 name="price"
                 value={product.price || ""}
                 onChange={handleChange}
-                pattern="^\d+(\.\d{1,2})?$" // Validates up to two decimal places
-                title="Enter a valid price (e.g., 19.99)"
+                
                 required
               />
             </div>
