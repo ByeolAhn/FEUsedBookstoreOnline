@@ -28,7 +28,10 @@ const Register = () => {
     register(user)
       .then((data) => {
         if (data && data.success) {
+<<<<<<< HEAD
           
+=======
+>>>>>>> 88a7240b41764f5c3b3bda41085430c09ca881e6
           window.alert("Registered User Successfully To Our Database");
           //Upon successful registration, alerts the user and triggers authentication.
           authenticate(data.token, () => {

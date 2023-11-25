@@ -183,9 +183,8 @@ const EditBooks = () => {
                 id="priceField"
                 placeholder="Enter the Price"
                 name="price"
-                value={product.price || 0}
+                value={product.price || ""}
                 onChange={handleChange}
-                min={0} // Set the minimum value to 0
                 required
               />
             </div>
