@@ -1,5 +1,5 @@
 import { getToken } from "../components/auth/auth-helper"
-const apiURL = process.env.REACT_APP_APIURL || "http://localhost:3000";
+const apiURL = process.env.REACT_APP_APIURL;
 
 const create = async (product) => {
   try {
