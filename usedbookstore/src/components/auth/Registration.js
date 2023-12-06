@@ -34,6 +34,7 @@ const Register = () => {
             navigate(from, { replace: true });
           });
         } else {
+         
           setErrorMsg(data.message);
         }
       })

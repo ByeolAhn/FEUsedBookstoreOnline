@@ -25,10 +25,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route path="books/create" element={
+          <Route path="books/create" element=          
+         {
           <PrivateRoute>
             <AddBooks /> 
-          </PrivateRoute>} />
+          </PrivateRoute>} /> 
           <Route path="/books/update/:isbn" element={
           <PrivateRoute>
             <EditBooks />
