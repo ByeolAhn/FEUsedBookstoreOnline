@@ -28,6 +28,11 @@ const ListBooks = () => {
             Add a new Book
           </Link>
         </div>
+        <div>
+          <Link to="/books/mylist" className="btn btn-primary">
+            My book list
+          </Link>
+        </div>
 
         <div className="table-responsive">
           {isLoading ? (
@@ -43,7 +48,7 @@ const ListBooks = () => {
                   <th>Condition</th>
                   <th>Price &nbsp;(CAD)&nbsp;</th>
                   <th>Description</th>
-                  <th>Actions</th>
+                  <th>Availability</th>
                 </tr>
               </thead>
               <tbody>
@@ -58,23 +63,7 @@ const ListBooks = () => {
                       <td>{product.price}</td>
                       <td>{product.description}</td>
                       <td>
-                        <table className="table">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <Link
-                                  to={`/books/update/${product.isbn}`}
-                                  className="btn btn-primary btn-sm"
-                                >
-                                  <i className="fas fa-pencil-alt"></i>
-                                </Link>
-                              </td>
-                              <td>
-                                
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
+                        
                       </td>
                     </tr>
                   ))}
