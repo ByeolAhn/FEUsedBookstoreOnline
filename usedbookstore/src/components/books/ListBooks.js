@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { list, remove } from "../../datasource/api-books";
+import { list } from "../../datasource/api-books";
 import { isAuthenticated } from "../auth/auth-helper";
 // Functional component definition for listing books
 const ListBooks = () => {
@@ -18,22 +18,7 @@ const ListBooks = () => {
         setIsLoading(false);
       });
   }, []);
- // to handle book removal
-  const handleRemove = (isbn) => {
-    if (!isAuthenticated())     
-      window.alert('You are not authenticated. Please, sign-in first.')
-    else if(window.confirm('Are you sure you want to delete this book?')) {
-      remove(isbn)
-        .then(() => {
-          setProductList((prevProductList) =>
-            prevProductList.filter((product) => product.isbn !== isbn)
-          );
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
+ 
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -85,12 +70,7 @@ const ListBooks = () => {
                                 </Link>
                               </td>
                               <td>
-                                <button
-                                  onClick={() => handleRemove(product.isbn)}
-                                  className="btn btn-danger btn-sm"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
+                                
                               </td>
                             </tr>
                           </tbody>

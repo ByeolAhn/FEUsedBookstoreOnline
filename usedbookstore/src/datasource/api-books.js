@@ -73,20 +73,6 @@ const update = async (isbn, item) => {
   }
 };
 
-const remove = async (isbn) => {
-  try {
-    let response = await fetch(apiURL + "/books/delete/" + isbn, {
-      method: "DELETE",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
-      }
-    })
-    return await response.json()
-  } catch (err) {
-    console.log(err)
-  }
-};
 
-export { create, list, read, update, remove  }
+
+export { create, list, read, update  }
