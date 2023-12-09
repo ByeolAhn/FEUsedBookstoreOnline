@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-free/js/all.min.js";
 import AddBooks from "./components/books/AddBooks";
 import EditBooks from "./components/books/EditBooks";
 import ListBooks from "./components/books/ListBooks";
+import ListMyBooks from "./components/books/ListMyBooks";
 import Footer from "./components/Footer";
 import Signin from "./components/auth/signin";
 import Registration from "./components/auth/Registration";
@@ -34,6 +35,7 @@ export default function App() {
             <EditBooks />
           </PrivateRoute>} />
           <Route path="/books/get" element={<ListBooks />} />
+          <Route path="/books/mylist" element={<ListMyBooks />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/users/signin" element={<Signin />} />
