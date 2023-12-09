@@ -16,7 +16,7 @@ const Register = () => {
     password: "",
     role: "",
   });
-//Handles form changes, submission, and displays error messages if registration fails.
+  //Handles form changes, submission, and displays error messages if registration fails.
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUser((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -29,10 +29,8 @@ const Register = () => {
       .then((data) => {
         if (data && data.success) {
           window.alert("Registered User Successfully To Our Database");
-          //Upon successful registration, alerts the user and triggers authentication.
-          authenticate(data.token, () => {
-            navigate(from, { replace: true });
-          });
+          //Upon successful registration, alerts the user
+          navigate('/users/signin');
         } else {
           setErrorMsg(data.message);
         }
