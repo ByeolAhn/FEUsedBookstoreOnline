@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { mylist } from "../../datasource/api-books";
-import { isAuthenticated2 } from "../auth/auth-helper";
+import { getToken, isAuthenticated2 } from "../auth/auth-helper";
+import { jwtDecode } from "jwt-decode";
 
 const ListMyBooks = () => {
     const navigate = useNavigate();
@@ -9,27 +10,35 @@ const ListMyBooks = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (!isAuthenticated2()) {
+        loadBooks();}, []);
+
+        const loadBooks =() => {
+            const token = getToken();
+        const userId = token ? jwtDecode(token).id : null;
+
+        if (!userId) {
             navigate("/users/signin");
             return;
         }
-
-        const userId = isAuthenticated2().user.user_id;
         mylist(userId)
-            .then((data) => {
-                if (Array.isArray(data)) {
-                    setMyBooks(data);
-                } else {
-                    setMyBooks([]);
-                }
-                setIsLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setIsLoading(false);
-            });
-    }, []);
+        .then((data) => {
+            if (data.error) {
+              console.log(data.error);
+            } else {
+              setMyBooks(data); 
+              setIsLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            setIsLoading(false);
+          });
+        };
+        
+        console.log("My Books Data:", myBooks);
 
+        
+        
     return (
         <div className="container" style={{ paddingTop: 80 }}>
             <div className="row">
@@ -54,7 +63,7 @@ const ListMyBooks = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {myBooks.map((book, index) => (
+                                {myBooks.books.map((book, index) => (
                                     <tr key={index}>
                                         <td>{book.isbn}</td>
                                         <td>{book.category}</td>
