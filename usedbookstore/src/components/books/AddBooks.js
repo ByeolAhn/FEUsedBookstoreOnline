@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../datasource/api-books";
 import BookModel from "../../datasource/booksModel";
+import { getToken } from "../auth/auth-helper";
+import { jwtDecode } from "jwt-decode";
 import "./addBookStyles.css";
 
 // Predefined list of categories for books
@@ -31,7 +33,7 @@ const categories = [
 const AddBooks = () => {
   let navigate = useNavigate();
   let [product, setProduct] = useState(
-    new BookModel("", "", "", "", "", 0, "")
+    new BookModel("", "", "", "", "", 0, "", "", "", "")
   );
 
 //Event handler to update the state on form input change
@@ -70,6 +72,15 @@ const calculateExpiryDate = (expiryOption) => {
 //Event handler for form submission
   const handleSubmit = (event) => {
     event.preventDefault();
+    const token = getToken();
+    const decodedToken = jwtDecode(token);
+    console.log("Decoded Token:", decodedToken);
+    const userId = decodedToken.id;
+    console.log("Extracted userId:", userId);
+    console.log("Retrieved token:", token);
+    console.log("Decoded user:", jwtDecode(token));
+
+
     console.log("Product Data: ", product);
     const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
     console.log("Expiry option: ", product.expiryDate);
@@ -85,7 +96,9 @@ const calculateExpiryDate = (expiryOption) => {
       price: product.price,
       description: product.description,
       expiryDate: expiryDate.toISOString(), // Convert to string format for storage
-      }
+      postedBy: userId,
+      active: product.active,
+    }
     };
 
     console.log("New Product Data: ", newProduct);

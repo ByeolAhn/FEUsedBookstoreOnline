@@ -37,7 +37,9 @@ const getToken = ()=>{
   if (typeof window === "undefined") {
     return false;
   }
-  return sessionStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
+  console.log("Retrieved token: ", token);
+  return token;
 }
 
 const getUsername = ()=>{
