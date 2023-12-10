@@ -77,7 +77,7 @@ const ListMyBooks = () => {
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.condition}</td>
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.price}</td>
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.description}</td>
-                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{hasExpired(book.expiryDate) ? "Expired" : "Available"}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{hasExpired(book.expiryDate) ? "Expired" : (product.active ? "Available" : "Unavailable")}</td>
                                         <td>
                                             <Link
                                                 to={`/books/update/${book.isbn}`}
