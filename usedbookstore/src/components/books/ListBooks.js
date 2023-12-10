@@ -65,6 +65,7 @@ const ListBooks = () => {
                   <th>Price &nbsp;(CAD)&nbsp;</th>
                   <th>Description</th>
                   <th>Availability</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -79,6 +80,16 @@ const ListBooks = () => {
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
+                      <td>
+                      {hasExpired(product.expiryDate) ? "" : 
+                              <Link
+                              to={`/books/details/${product.isbn}`}
+                              className="btn btn-primary btn-sm"
+                          >
+                              <i className="fas fa-comment-alt"></i>
+                          </Link>}
+                                            
+                                        </td>
                     </tr>
                   ))}
               </tbody>

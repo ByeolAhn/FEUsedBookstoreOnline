@@ -35,11 +35,12 @@ export default function App() {
           <PrivateRoute>
             <EditBooks />
           </PrivateRoute>} />
-          <Route path="/books/details/:isbn" element={
+          {/* <Route path="/books/details/:isbn" element={
           <PrivateRoute>
             <DetailsBooks />
-          </PrivateRoute>} />
+          </PrivateRoute>} /> */}
           <Route path="/books/get" element={<ListBooks />} />
+          <Route path="/books/details/:isbn" element={<DetailsBooks />} />
           <Route path="/books/mylist" element={<ListMyBooks />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
