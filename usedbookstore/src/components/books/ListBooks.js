@@ -76,6 +76,14 @@ const ListBooks = () => {
                         <table className="table">
                           <tbody>
                             <tr>
+                               <td>
+                                <Link
+                                  to={`/books/details/${product.isbn}`}
+                                  className="btn btn-warning btn-sm"
+                                >
+                                  <i className="fas fa-eye-alt"></i>
+                                </Link>
+                              </td>
                               <td>
                                 <Link
                                   to={`/books/update/${product.isbn}`}

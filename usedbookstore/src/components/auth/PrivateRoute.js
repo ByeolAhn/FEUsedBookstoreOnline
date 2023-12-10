@@ -4,7 +4,7 @@ import { isAuthenticated } from './auth-helper'
 
 //Utilizes React Router's useLocation to get the current location
 function PrivateRoute({ children }){
-
+          
     let location = useLocation();
 
     //Used isAuthenticated from auth-helper to determine whether to allow access.
