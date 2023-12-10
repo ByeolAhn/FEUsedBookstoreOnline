@@ -7,6 +7,7 @@ const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [onlyShowAvailable, setOnlyShowAvailable] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,6 +34,12 @@ const ListBooks = () => {
     return currentDate > expiryDate;
   };
 
+  const filteredProductList = onlyShowAvailable
+    ? productList.filter(
+        (product) => !hasExpired(product.expiryDate) && product.active
+      )
+    : productList;
+
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -46,6 +53,14 @@ const ListBooks = () => {
           <Link to="/books/mylist" className="btn btn-primary">
             My book list
           </Link>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={onlyShowAvailable}
+            onChange={(e) => setOnlyShowAvailable(e.target.checked)}
+          />
+          <label>Show only available books</label>
         </div>
 
         <div className="table-responsive">
@@ -66,8 +81,8 @@ const ListBooks = () => {
                 </tr>
               </thead>
               <tbody>
-                {productList &&
-                  productList.map((product, index) => (
+                {filteredProductList &&
+                  filteredProductList.map((product, index) => (
                     <tr key={index} style={hasExpired(product.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.isbn}</td>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.category}</td>
