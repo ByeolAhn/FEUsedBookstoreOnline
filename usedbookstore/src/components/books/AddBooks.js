@@ -45,24 +45,34 @@ const calculateExpiryDate = (expiryOption) => {
   const currentDate = new Date();
   switch (expiryOption) {
     case "20 seconds":
-      return new Date(currentDate.getTime() + 20 * 1000);
+      const twentySecondsLater = new Date(currentDate.getTime() + 20 * 1000);
+      console.log("20 seconds later:", twentySecondsLater);
+      return twentySecondsLater;
     case "24HR":
-      return new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+      const twentyFourHoursLater = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+      console.log("24 hours later:", twentyFourHoursLater);
+      return twentyFourHoursLater;
     case "3DAYS":
-      return new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+      const threeDaysLater = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+      console.log("3 days later:", threeDaysLater);
+      return threeDaysLater;
     case "1WEEK":
-      return new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    // Add cases for other durations similarly...
+      const oneWeekLater = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+      console.log("1 week later:", oneWeekLater);
+      return oneWeekLater;
     default:
+      console.log("Invalid expiry option");
       return null;
   }
 };
 
+
 //Event handler for form submission
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("Product Data: ", product);
     const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
-    
+    console.log("Expiry option: ", product.expiryDate);
     let newProduct; // Declare newProduct 
     // Check if expiryDate is valid before proceeding
   if (expiryDate) {
@@ -77,9 +87,13 @@ const calculateExpiryDate = (expiryOption) => {
       expiryDate: expiryDate.toISOString(), // Convert to string format for storage
       }
     };
+
+    console.log("New Product Data: ", newProduct);
+
     // Invokes the API function to add a new book.
     create(newProduct)
       .then((data) => {
+        console.log("API Response: ", data);
         if (data && data.id) {
           alert("Item added with the id " + data.id);
           navigate("/books/get");
@@ -221,11 +235,6 @@ const calculateExpiryDate = (expiryOption) => {
                 <option value="24HR">24 Hours</option>
                 <option value="3DAYS">3 Days</option>
                 <option value="1WEEK">1 Week</option>
-                <option value="3WEEKS">3 Weeks</option>
-                <option value="1MONTH">1 Month</option>
-                <option value="3MONTHS">3 Months</option>
-                <option value="6MONTHS">6 Months</option>
-                <option value="1YEAR">1 Year</option>
               </select>
             </div>
 

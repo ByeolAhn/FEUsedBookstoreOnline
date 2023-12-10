@@ -7,7 +7,10 @@ class BookModel {
     author,
     condition,
     price,
-    description
+    description,
+    expiryDate,
+    postedBy,
+    active
   ) {
     this.id = id;
     this.isbn = isbn;
@@ -17,6 +20,9 @@ class BookModel {
     this.condition = condition;
     this.price = price;
     this.description = description;
+    this.expiryDate = expiryDate;
+    this.postedBy = postedBy;
+    this.active = active;
   }
 }
 export default BookModel;
