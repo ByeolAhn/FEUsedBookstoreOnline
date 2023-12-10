@@ -8,12 +8,14 @@ const ListMyBooks = () => {
     const navigate = useNavigate();
     const [myBooks, setMyBooks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentDate, setCurrentDate] = useState(new Date());
 
     useEffect(() => {
-        loadBooks();}, []);
+        loadBooks();
+    }, []);
 
-        const loadBooks =() => {
-            const token = getToken();
+    const loadBooks = () => {
+        const token = getToken();
         const userId = token ? jwtDecode(token).id : null;
 
         if (!userId) {
@@ -21,24 +23,30 @@ const ListMyBooks = () => {
             return;
         }
         mylist(userId)
-        .then((data) => {
-            if (data.error) {
-              console.log(data.error);
-            } else {
-              setMyBooks(data); 
-              setIsLoading(false);
-            }
-          })
-          .catch((err) => {
-            console.error(err);
-            setIsLoading(false);
-          });
-        };
-        
-        console.log("My Books Data:", myBooks);
+            .then((data) => {
+                if (data.error) {
+                    console.log(data.error);
+                } else {
+                    setMyBooks(data);
+                    setIsLoading(false);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setIsLoading(false);
+            });
+    };
 
-        
-        
+    console.log("My Books Data:", myBooks);
+
+    const hasExpired = (expiryDateString) => {
+        const expiryDate = new Date(expiryDateString);
+        console.log("Expiry Date:", expiryDate);
+        console.log("Current Date:", currentDate);
+        return currentDate > expiryDate;
+      };
+
+
     return (
         <div className="container" style={{ paddingTop: 80 }}>
             <div className="row">
@@ -59,19 +67,21 @@ const ListMyBooks = () => {
                                     <th>Condition</th>
                                     <th>Price</th>
                                     <th>Description</th>
+                                    <th>Availability</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {myBooks.books.map((book, index) => (
-                                    <tr key={index}>
-                                        <td>{book.isbn}</td>
-                                        <td>{book.category}</td>
-                                        <td>{book.title}</td>
-                                        <td>{book.author}</td>
-                                        <td>{book.condition}</td>
-                                        <td>{book.price}</td>
-                                        <td>{book.description}</td>
+                                    <tr key={index} style={hasExpired(book.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.isbn}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.category}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.title}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.author}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.condition}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.price}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.description}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{hasExpired(book.expiryDate) ? "Expired" : "Available"}</td>
                                         <td>
                                             <Link
                                                 to={`/books/update/${book.isbn}`}
