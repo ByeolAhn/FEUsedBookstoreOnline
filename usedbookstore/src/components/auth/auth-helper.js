@@ -20,12 +20,15 @@ const isAuthenticated = ()=>{
 
 const isAuthenticated2 = ()=>{
   if (typeof window === "undefined") {
+    console.log("Window is undefined");
     return false;
   }
   if (!sessionStorage.getItem('token')) {
+    console.log("Token not found");
     return false;
   }
   const decoded = jwtDecode(sessionStorage.getItem('token'));
+  console.log("Decoded user:", decoded);
   return { user: decoded };
 }
 
