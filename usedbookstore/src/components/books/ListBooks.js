@@ -6,8 +6,13 @@ import { isAuthenticated } from "../auth/auth-helper";
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // useEffect hook to fetch the list of books when the component mounts
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
     list()
       .then((data) => {
         setProductList(data || []); // Set to an empty array if data is undefined
@@ -17,8 +22,19 @@ const ListBooks = () => {
         console.error(err);
         setIsLoading(false);
       });
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
- 
+
+  const hasExpired = (expiryDateString) => {
+    const expiryDate = new Date(expiryDateString);
+    console.log("Expiry Date:", expiryDate);
+    console.log("Current Date:", currentDate);
+    return currentDate > expiryDate;
+  };
+
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -54,17 +70,15 @@ const ListBooks = () => {
               <tbody>
                 {productList &&
                   productList.map((product, index) => (
-                    <tr key={index}>
-                      <td>{product.isbn}</td>
-                      <td>{product.category}</td>
-                      <td>{product.title}</td>
-                      <td>{product.author}</td>
-                      <td>{product.condition}</td>
-                      <td>{product.price}</td>
-                      <td>{product.description}</td>
-                      <td>
-                        
-                      </td>
+                    <tr key={index} style={hasExpired(product.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.isbn}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.category}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.title}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.author}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.condition}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
                     </tr>
                   ))}
               </tbody>

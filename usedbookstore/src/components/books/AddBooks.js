@@ -39,11 +39,34 @@ const AddBooks = () => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
+// Function to calculate the expiry date based on the selected option
+const calculateExpiryDate = (expiryOption) => {
+  const currentDate = new Date();
+  switch (expiryOption) {
+    case "20 seconds":
+      return new Date(currentDate.getTime() + 20 * 1000);
+    case "24HR":
+      return new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+    case "3DAYS":
+      return new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+    case "1WEEK":
+      return new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    // Add cases for other durations similarly...
+    default:
+      return null;
+  }
+};
+
 //Event handler for form submission
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Extract relevant book details from the state
-    let newProduct = {
+    const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
+    
+    let newProduct; // Declare newProduct 
+    // Check if expiryDate is valid before proceeding
+  if (expiryDate) {
+    newProduct= {
       isbn: product.isbn,
       category: product.category,
       title: product.title,
@@ -51,6 +74,8 @@ const AddBooks = () => {
       condition: product.condition,
       price: product.price,
       description: product.description,
+      expiryDate: expiryDate.toISOString(), // Convert to string format for storage
+      }
     };
     // Invokes the API function to add a new book.
     create(newProduct)
@@ -178,6 +203,30 @@ const AddBooks = () => {
                 
                 required
               />
+            </div>
+
+            {/* EXPIRY DATE */}
+            <div className="form-group">
+              <label htmlFor="expiryDateField">Expiry Date:</label>
+              <select
+                className="form-control"
+                id="expiryDateField"
+                name="expiryDate"
+                value={product.expiryDate || ""}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Choose an expiry duration</option>
+                <option value="20 seconds">20 seconds</option>
+                <option value="24HR">24 Hours</option>
+                <option value="3DAYS">3 Days</option>
+                <option value="1WEEK">1 Week</option>
+                <option value="3WEEKS">3 Weeks</option>
+                <option value="1MONTH">1 Month</option>
+                <option value="3MONTHS">3 Months</option>
+                <option value="6MONTHS">6 Months</option>
+                <option value="1YEAR">1 Year</option>
+              </select>
             </div>
 
             {/* DESCRIPTION */}
