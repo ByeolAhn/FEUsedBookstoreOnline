@@ -30,8 +30,6 @@ const ListBooks = () => {
 
   const hasExpired = (expiryDateString) => {
     const expiryDate = new Date(expiryDateString);
-    console.log("Expiry Date:", expiryDate);
-    console.log("Current Date:", currentDate);
     return currentDate > expiryDate;
   };
 
