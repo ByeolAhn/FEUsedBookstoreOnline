@@ -50,11 +50,12 @@ const mylist = async (userId) => {
 
 const read = async (isbn) => {
   try {
-    let response = await fetch(apiURL + "/books/find/" + isbn, {
+    let response = await fetch(apiURL + "/books/findbyisbn/" + isbn, {
       method: "GET",
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getToken()
       },
     });
 

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { read, update } from "../../datasource/api-books";
 import BooksModel from "../../datasource/booksModel";
 
-const condition = ["New", "Like new", "Used", "Worn"];
+const conditionOptions = ["New", "Like new", "Used", "Worn"];
 
 // Predefined list of categories
 const categories = [
@@ -31,7 +31,7 @@ const EditBooks = () => {
   console.log("useParams", useParams());
   let { isbn } = useParams();
 
-  let [product, setProduct] = useState(new BooksModel());
+  let [book, setBook] = useState(new BooksModel());
 
   // Fetching book details based on ISBN when the component mounts
   useEffect(() => {
@@ -39,7 +39,7 @@ const EditBooks = () => {
       .then((data) => {
         console.log("Logging data", data);
         if (data) {
-          setProduct(
+          setBook(
             new BooksModel(
               data.id,
               data.isbn,
@@ -48,7 +48,10 @@ const EditBooks = () => {
               data.author,
               data.condition,
               data.price,
-              data.description
+              data.description,
+              data.expiryDate,
+              data.postedBy,
+              data.active
             )
           );
         }
@@ -61,24 +64,28 @@ const EditBooks = () => {
   // Handling changes in form fields
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
+    if (name !== 'postedBy') {
+      setBook((prevFormData) => ({ ...prevFormData, [name]: value }));
+    }
   };
   // Handling form submission to update book details
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const newProduct = {
-      id: product.id,
-      isbn: product.isbn,
-      category: product.category,
-      title: product.title,
-      author: product.author,
-      condition: product.condition,
-      price: product.price,
-      description: product.description,
+    const updatedBook = {
+      id: book.id,
+      isbn: book.isbn,
+      category: book.category,
+      title: book.title,
+      author: book.author,
+      condition: book.condition,
+      price: book.price,
+      description: book.description,
+      expiryDate: book.expiryDate,
+      active: book.active,
     };
     // Invoking the update API function
-    update(isbn, newProduct)
+    update(isbn, updatedBook)
       .then((data) => {
         if (data && data.success) {
           alert(data.message);
@@ -105,7 +112,7 @@ const EditBooks = () => {
             style={{ paddingTop: 40 }}
           >
             <div className="form-group">
-              <input type="hidden" name="id" value={product.id || ""} />
+              <input type="hidden" name="id" value={book.id || ""} />
 
               {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>
@@ -115,7 +122,7 @@ const EditBooks = () => {
                 id="isbnField"
                 placeholder="Enter the ISBN"
                 name="isbn"
-                value={product.isbn || ""}
+                value={book.isbn || ""}
                 onChange={handleChange}
                 required
               />
@@ -128,7 +135,7 @@ const EditBooks = () => {
                 className="form-control"
                 id="categoryField"
                 name="category"
-                value={product.category || ""}
+                value={book.category || ""}
                 onChange={handleChange}
                 required
               >
@@ -150,7 +157,7 @@ const EditBooks = () => {
                 id="authorField"
                 placeholder="Enter the Author"
                 name="author"
-                value={product.author || ""}
+                value={book.author || ""}
                 onChange={handleChange}
                 required
               />
@@ -163,13 +170,13 @@ const EditBooks = () => {
                 className="form-control"
                 id="conditionField"
                 name="condition"
-                value={product.condition || ""}
+                value={book.condition || ""}
                 onChange={handleChange}
                 required
               >
                 <option value="">Choose a condition</option>
-                {condition.map((condition) => (
-                  <option key={condition} value={condition}>
+                {conditionOptions.map((condition, index) => (
+                  <option key={index} value={condition}>
                     {condition}
                   </option>
                 ))}
@@ -185,7 +192,7 @@ const EditBooks = () => {
                 id="priceField"
                 placeholder="Enter the Price"
                 name="price"
-                value={product.price || ""}
+                value={book.price || ""}
                 onChange={handleChange}
                 required
               />
@@ -199,11 +206,42 @@ const EditBooks = () => {
                 id="descriptionField"
                 placeholder="Enter the Description"
                 name="description"
-                value={product.description || ""}
+                value={book.description || ""}
                 onChange={handleChange}
                 required
               ></textarea>
             </div>
+
+            {/* EXPIRY DATE */}
+          <div className="form-group">
+            <label htmlFor="expiryDateField">Expiry Date:</label>
+            <input
+              type="date"
+              className="form-control"
+              id="expiryDateField"
+              name="expiryDate"
+              value={book.expiryDate || ""}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* ACTIVE */}
+          <div className="form-group">
+            <label htmlFor="activeField">Active:</label>
+            <select
+              className="form-control"
+              id="activeField"
+              name="active"
+              value={book.active || ""}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Active Status</option>
+              <option value="true">Available</option>
+              <option value="false">Unavailable</option>
+            </select>
+          </div>
 
             {/* SUBMIT BUTTON */}
             <button className="btn btn-primary" type="submit">
