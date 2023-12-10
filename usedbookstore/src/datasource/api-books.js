@@ -33,6 +33,21 @@ const list = async () => {
   }
 };
 
+const mylist = async (userId) => {
+  try {
+    let response = await fetch(`${apiURL}/books/find/${userId}`, {
+      method: "GET",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const read = async (isbn) => {
   try {
     let response = await fetch(apiURL + "/books/find/" + isbn, {
@@ -73,20 +88,6 @@ const update = async (isbn, item) => {
   }
 };
 
-const remove = async (isbn) => {
-  try {
-    let response = await fetch(apiURL + "/books/delete/" + isbn, {
-      method: "DELETE",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
-      }
-    })
-    return await response.json()
-  } catch (err) {
-    console.log(err)
-  }
-};
 
-export { create, list, read, update, remove  }
+
+export { create, list, mylist, read, update  }

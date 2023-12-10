@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { list, remove } from "../../datasource/api-books";
+import { list } from "../../datasource/api-books";
 import { isAuthenticated } from "../auth/auth-helper";
 // Functional component definition for listing books
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  // useEffect hook to fetch the list of books when the component mounts
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
     list()
       .then((data) => {
         setProductList(data || []); // Set to an empty array if data is undefined
@@ -17,23 +22,19 @@ const ListBooks = () => {
         console.error(err);
         setIsLoading(false);
       });
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
- // to handle book removal
-  const handleRemove = (isbn) => {
-    if (!isAuthenticated())     
-      window.alert('You are not authenticated. Please, sign-in first.')
-    else if(window.confirm('Are you sure you want to delete this book?')) {
-      remove(isbn)
-        .then(() => {
-          setProductList((prevProductList) =>
-            prevProductList.filter((product) => product.isbn !== isbn)
-          );
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
+
+  const hasExpired = (expiryDateString) => {
+    const expiryDate = new Date(expiryDateString);
+    console.log("Expiry Date:", expiryDate);
+    console.log("Current Date:", currentDate);
+    return currentDate > expiryDate;
   };
+
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -41,6 +42,11 @@ const ListBooks = () => {
         <div>
           <Link to="/books/create" className="btn btn-primary">
             Add a new Book
+          </Link>
+        </div>
+        <div>
+          <Link to="/books/mylist" className="btn btn-primary">
+            My book list
           </Link>
         </div>
 
@@ -58,52 +64,21 @@ const ListBooks = () => {
                   <th>Condition</th>
                   <th>Price &nbsp;(CAD)&nbsp;</th>
                   <th>Description</th>
-                  <th>Actions</th>
+                  <th>Availability</th>
                 </tr>
               </thead>
               <tbody>
                 {productList &&
                   productList.map((product, index) => (
-                    <tr key={index}>
-                      <td>{product.isbn}</td>
-                      <td>{product.category}</td>
-                      <td>{product.title}</td>
-                      <td>{product.author}</td>
-                      <td>{product.condition}</td>
-                      <td>{product.price}</td>
-                      <td>{product.description}</td>
-                      <td>
-                        <table className="table">
-                          <tbody>
-                            <tr>
-                               <td>
-                                <Link
-                                  to={`/books/details/${product.isbn}`}
-                                  className="btn btn-warning btn-sm"
-                                >
-                                  <i className="fas fa-eye-alt"></i>
-                                </Link>
-                              </td>
-                              <td>
-                                <Link
-                                  to={`/books/update/${product.isbn}`}
-                                  className="btn btn-primary btn-sm"
-                                >
-                                  <i className="fas fa-pencil-alt"></i>
-                                </Link>
-                              </td>
-                              <td>
-                                <button
-                                  onClick={() => handleRemove(product.isbn)}
-                                  className="btn btn-danger btn-sm"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
+                    <tr key={index} style={hasExpired(product.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.isbn}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.category}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.title}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.author}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.condition}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
                     </tr>
                   ))}
               </tbody>
