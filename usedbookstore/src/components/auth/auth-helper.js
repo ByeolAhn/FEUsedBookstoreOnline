@@ -18,6 +18,17 @@ const isAuthenticated = ()=>{
   return !!sessionStorage.getItem('token');
 }
 
+const isAuthenticated2 = ()=>{
+  if (typeof window === "undefined") {
+    return false;
+  }
+  if (!sessionStorage.getItem('token')) {
+    return false;
+  }
+  const decoded = jwtDecode(sessionStorage.getItem('token'));
+  return { user: decoded };
+}
+
 //Retrieves the token, username from sessionStorage.
 const getToken = ()=>{
   if (typeof window === "undefined") {
@@ -41,4 +52,4 @@ const clearJWT = ()=>{
   }
 }
 
-export { authenticate, isAuthenticated, getToken, getUsername, clearJWT }
+export { authenticate, isAuthenticated, isAuthenticated2, getToken, getUsername, clearJWT }

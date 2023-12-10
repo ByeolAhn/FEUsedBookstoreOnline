@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { mylist } from "../../datasource/api-books";
-import { isAuthenticated } from "../auth/auth-helper";
+import { isAuthenticated2 } from "../auth/auth-helper";
 
-const ListMyBooks = () => {
+const ListMyBooks = ({history}) => {
     const [myBooks, setMyBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-        history.push("/login");
+    if (!isAuthenticated2()) {
+        history.push("/users/signin");
         return;
       }
   
-      const userId = isAuthenticated().user._id;
-      myList(userId)
+      const userId = isAuthenticated2().user.user_id;
+      mylist(userId)
         .then((data) => {
-          setMyBooks(data || []);
+            if (Array.isArray(data)) {
+                setMyBooks(data);
+            } else {
+                setMyBooks([]);
+            }
           setIsLoading(false);
         })
       .catch((err) => {
         console.error(err);
         setIsLoading(false);
       });
-  }, []);
+  }, [history]);
 
   return (
     <div className="container" style={{ paddingTop: 80 }}>
@@ -32,7 +36,9 @@ const ListMyBooks = () => {
         <div className="table-responsive">
           {isLoading ? (
             <p>Loading...</p>
-          ) : (
+          ) : myBooks.length === 0 ? (
+            <p>Your List is empty</p>
+          ) :(
             <table className="table table-bordered table-striped table-hover">
               <thead>
                 <tr>
