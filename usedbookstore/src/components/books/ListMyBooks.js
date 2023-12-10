@@ -37,12 +37,8 @@ const ListMyBooks = () => {
             });
     };
 
-    console.log("My Books Data:", myBooks);
-
     const hasExpired = (expiryDateString) => {
         const expiryDate = new Date(expiryDateString);
-        console.log("Expiry Date:", expiryDate);
-        console.log("Current Date:", currentDate);
         return currentDate > expiryDate;
       };
 
@@ -54,7 +50,7 @@ const ListMyBooks = () => {
                 <div className="table-responsive">
                     {isLoading ? (
                         <p>Loading...</p>
-                    ) : myBooks.length === 0 ? (
+                    ) : (!myBooks || !myBooks.books || myBooks.books.length === 0) ? (
                         <p>Your List is empty</p>
                     ) : (
                         <table className="table table-bordered table-striped table-hover">
@@ -81,7 +77,7 @@ const ListMyBooks = () => {
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.condition}</td>
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.price}</td>
                                         <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{book.description}</td>
-                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{hasExpired(book.expiryDate) ? "Expired" : "Available"}</td>
+                                        <td style={hasExpired(book.expiryDate) ? { color: 'red' } : {}}>{hasExpired(book.expiryDate) ? "Expired" : (book.active ? "Available" : "Unavailable")}</td>
                                         <td>
                                             <Link
                                                 to={`/books/update/${book.isbn}`}
