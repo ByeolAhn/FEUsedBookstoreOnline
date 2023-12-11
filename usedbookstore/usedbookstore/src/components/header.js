@@ -5,11 +5,12 @@ import { isAuthenticated, getUsername, clearJWT } from "./auth/auth-helper";
 
 const Header = () => {
   const location = useLocation();
-  const [userId, setUserId] = useState("");
-  useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
-    setUserId(userId);
-  });
+  const [userId, setUserId] = useState("")
+useEffect(() => {
+  const userId = sessionStorage.getItem('userId');
+  setUserId(userId)
+
+});
   const signoutClick = () => {
     clearJWT();
   };
@@ -75,10 +76,7 @@ const Header = () => {
             <ul className="navbar-nav ml-auto">
               {isAuthenticated() && (
                 <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    to={`/users/getUserByUserId/${userId}`}
-                  >
+                  <NavLink className="nav-link" to= {`/users/getUserByUserId/${userId}`}>
                     <i className="fas fa-user"></i> My Profile
                   </NavLink>
                 </li>

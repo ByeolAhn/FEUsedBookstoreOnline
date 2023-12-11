@@ -1,13 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { create } from "../../datasource/api-books";
-import BookModel from "../../datasource/booksModel";
-import "./addBookStyles.css";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { read, update } from "../../datasource/api-books";
+import BooksModel from "../../datasource/booksModel";
 
-// Predefined list of categories for books
 const condition = ["New", "Like new", "Used", "Worn"];
 
-// Predefined list of categories for books
+// Predefined list of categories
 const categories = [
   "Fiction",
   "Non-fiction",
@@ -27,65 +25,66 @@ const categories = [
   "Nursing",
 ];
 
-//Functional component for adding books
-const AddBooks = () => {
+// Functional component for editing book details
+const EditBooks = () => {
   let navigate = useNavigate();
-  let [product, setProduct] = useState(
-    new BookModel("", "", "", "", "", 0, "")
-  );
+  console.log("useParams", useParams());
+  let { isbn } = useParams();
 
-  //Event handler to update the state on form input change
+  let [product, setProduct] = useState(new BooksModel());
+
+  // Fetching book details based on ISBN when the component mounts
+  useEffect(() => {
+    read(isbn)
+      .then((data) => {
+        console.log("Logging data", data);
+        if (data) {
+          setProduct(
+            new BooksModel(
+              data.id,
+              data.isbn,
+              data.category,
+              data.title,
+              data.author,
+              data.condition,
+              data.price,
+              data.description
+            )
+          );
+        }
+      })
+      .catch((err) => {
+        alert(err.message);
+        console.log(err);
+      });
+  }, [isbn]);
+  // Handling changes in form fields
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
-
-  // Function to calculate the expiry date based on the selected option
-  const calculateExpiryDate = (expiryOption) => {
-    const currentDate = new Date();
-    switch (expiryOption) {
-      case "20 seconds":
-        return new Date(currentDate.getTime() + 20 * 1000);
-      case "24HR":
-        return new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
-      case "3DAYS":
-        return new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-      case "1WEEK":
-        return new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-      // Add cases for other durations similarly...
-      default:
-        return null;
-    }
-  };
-  // Event handler for form submission
+  // Handling form submission to update book details
   const handleSubmit = (event) => {
     event.preventDefault();
-    const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
 
-    let newProduct; // Declare newProduct here
-    // Check if expiryDate is valid before proceeding
-    if (expiryDate) {
-      newProduct = {
-        isbn: product.isbn,
-        category: product.category,
-        title: product.title,
-        author: product.author,
-        condition: product.condition,
-        price: product.price,
-        description: product.description,
-
-        expiryDate: expiryDate.toISOString(), // Convert to string format for storage
-      };
-    }
-
-    // Invokes the API function to add a new book.
-    create(newProduct)
+    const newProduct = {
+      id: product.id,
+      isbn: product.isbn,
+      category: product.category,
+      title: product.title,
+      author: product.author,
+      condition: product.condition,
+      price: product.price,
+      description: product.description,
+    };
+    // Invoking the update API function
+    update(isbn, newProduct)
       .then((data) => {
-        if (data && data.id) {
-          alert("Item added with the id " + data.id);
+        if (data && data.success) {
+          alert(data.message);
           navigate("/books/get");
         } else {
-          alert(data.message);
+          alert(data && data.message ? data.message : "Failed to update book.");
         }
       })
       .catch((err) => {
@@ -98,16 +97,17 @@ const AddBooks = () => {
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
         <div className="offset-md-3 col-md-6">
-          <h1 style={{ paddingTop: 40 }}>Add a Book:</h1>
+          <h1 style={{ paddingTop: 40 }}>Edit A Book:</h1>
 
           <form
             onSubmit={handleSubmit}
             className="form"
             style={{ paddingTop: 40 }}
           >
-            {/* ISBN */}
             <div className="form-group">
-              <input type="hidden" name="id" value={product.id || ""}></input>
+              <input type="hidden" name="id" value={product.id || ""} />
+
+              {/* ISBN */}
               <label htmlFor="isbnField">ISBN:</label>
               <input
                 type="text"
@@ -116,21 +116,6 @@ const AddBooks = () => {
                 placeholder="Enter the ISBN"
                 name="isbn"
                 value={product.isbn || ""}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* TITLE */}
-            <div className="form-group">
-              <label htmlFor="titleField">Book Title:</label>
-              <input
-                type="text"
-                className="form-control"
-                id="titleField"
-                placeholder="Enter the title of the book"
-                name="title"
-                value={product.title || ""}
                 onChange={handleChange}
                 required
               />
@@ -198,36 +183,12 @@ const AddBooks = () => {
                 type="number"
                 className="form-control"
                 id="priceField"
-                placeholder="Enter the Price (e.g., 19.99)"
+                placeholder="Enter the Price"
                 name="price"
                 value={product.price || ""}
                 onChange={handleChange}
                 required
               />
-            </div>
-
-            {/* EXPIRY DATE */}
-            <div className="form-group">
-              <label htmlFor="expiryDateField">Expiry Date:</label>
-              <select
-                className="form-control"
-                id="expiryDateField"
-                name="expiryDate"
-                value={product.expiryDate || ""}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Choose an expiry duration</option>
-                <option value="20 seconds">20 seconds</option>
-                <option value="24HR">24 Hours</option>
-                <option value="3DAYS">3 Days</option>
-                <option value="1WEEK">1 Week</option>
-                <option value="3WEEKS">3 Weeks</option>
-                <option value="1MONTH">1 Month</option>
-                <option value="3MONTHS">3 Months</option>
-                <option value="6MONTHS">6 Months</option>
-                <option value="1YEAR">1 Year</option>
-              </select>
             </div>
 
             {/* DESCRIPTION */}
@@ -244,12 +205,14 @@ const AddBooks = () => {
               ></textarea>
             </div>
 
+            {/* SUBMIT BUTTON */}
             <button className="btn btn-primary" type="submit">
               <i className="fas fa-edit"></i>
               Submit
             </button>
 
-            <Link to="/books/" className="btn btn-warning">
+            {/* CANCEL BUTTON */}
+            <Link to="/books/get" className="btn btn-warning">
               <i className="fas fa-undo"></i>
               Cancel
             </Link>
@@ -259,4 +222,4 @@ const AddBooks = () => {
     </div>
   );
 };
-export default AddBooks;
+export default EditBooks;

@@ -34,6 +34,8 @@ const AddBooks = () => {
     new BookModel("", "", "", "", "", 0, "")
   );
 
+  
+
   //Event handler to update the state on form input change
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -57,26 +59,25 @@ const AddBooks = () => {
         return null;
     }
   };
-  // Event handler for form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
+ // Event handler for form submission
+ const handleSubmit = (event) => {
+  event.preventDefault();
+  const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
 
-    let newProduct; // Declare newProduct here
-    // Check if expiryDate is valid before proceeding
-    if (expiryDate) {
-      newProduct = {
-        isbn: product.isbn,
-        category: product.category,
-        title: product.title,
-        author: product.author,
-        condition: product.condition,
-        price: product.price,
-        description: product.description,
-
-        expiryDate: expiryDate.toISOString(), // Convert to string format for storage
-      };
-    }
+  let newProduct; // Declare newProduct here
+  // Check if expiryDate is valid before proceeding
+  if (expiryDate) {
+     newProduct= {
+      isbn: product.isbn,
+      category: product.category,
+      title: product.title,
+      author: product.author,
+      condition: product.condition,
+      price: product.price,
+      description: product.description,
+    
+    expiryDate: expiryDate.toISOString(), // Convert to string format for storage
+      }};
 
     // Invokes the API function to add a new book.
     create(newProduct)
@@ -92,8 +93,10 @@ const AddBooks = () => {
         alert(err.message);
         console.log(err);
       });
+    
+      
   };
-
+  
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -202,6 +205,7 @@ const AddBooks = () => {
                 name="price"
                 value={product.price || ""}
                 onChange={handleChange}
+
                 required
               />
             </div>

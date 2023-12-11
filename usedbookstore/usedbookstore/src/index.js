@@ -20,37 +20,28 @@ import Registration from "./components/auth/Registration";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import MyProfile from "./pages/MyProfile";
 
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route
-            path="books/create"
-            element={
-              <PrivateRoute>
-                <AddBooks />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/books/update/:isbn"
-            element={
-              <PrivateRoute>
-                <EditBooks />
-              </PrivateRoute>
-            }
-          />
+          <Route path="books/create" element=          
+         {
+          <PrivateRoute>
+            <AddBooks /> 
+          </PrivateRoute>} /> 
+          <Route path="/books/update/:isbn" element={
+          <PrivateRoute>
+            <EditBooks />
+          </PrivateRoute>} />
           <Route path="/books/get" element={<ListBooks />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/users/signin" element={<Signin />} />
           <Route path="/users/create" element={<Registration />} />
-          <Route
-            path="/users/getUserByUserId/:userId"
-            element={<MyProfile />}
-          />
+        <Route path="/users/getUserByUserId/:userId" element={<MyProfile />}/>
         </Route>
       </Routes>
       <Footer />
