@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, NavLink, Link, useLocation } from "react-router-dom";
 import image_logo from "../assets/logo.png";
 import { isAuthenticated, getUsername, clearJWT } from "./auth/auth-helper";
 
 const Header = () => {
   const location = useLocation();
-
+  const [userId, setUserId] = useState("");
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    setUserId(userId);
+  });
   const signoutClick = () => {
     clearJWT();
   };
@@ -69,11 +73,16 @@ const Header = () => {
             </ul>
             {/* Aligned to the Right */}
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/users/list">
-                  <i className="fas fa-user"></i> Users
-                </NavLink>
-              </li>
+              {isAuthenticated() && (
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    to={`/users/getUserByUserId/${userId}`}
+                  >
+                    <i className="fas fa-user"></i> My Profile
+                  </NavLink>
+                </li>
+              )}
               <li className="nav-item">
                 {!isAuthenticated() && (
                   <NavLink className="nav-link" to="/users/signin">

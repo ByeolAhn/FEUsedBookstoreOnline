@@ -1,4 +1,4 @@
-import { getToken } from "../components/auth/auth-helper"
+import { getToken } from "../components/auth/auth-helper";
 const apiURL = process.env.REACT_APP_APIURL;
 
 const create = async (product) => {
@@ -6,9 +6,9 @@ const create = async (product) => {
     let response = await fetch(`${apiURL}/books/create/`, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken(),
       },
       body: JSON.stringify(product),
     });
@@ -23,8 +23,8 @@ const list = async () => {
     let response = await fetch(`${apiURL}/books/get/`, {
       method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
     return await response.json();
@@ -53,7 +53,7 @@ const read = async (isbn) => {
     let response = await fetch(apiURL + "/books/findbyisbn/" + isbn, {
       method: "GET",
       headers: {
-        'Accept': 'application/json',
+      'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + getToken()
       },
@@ -78,7 +78,7 @@ const readBook = async (isbn) => {
     let response = await fetch(apiURL + "/books/findbyisbn/" + isbn, {
       method: "GET",
       headers: {
-        'Accept': 'application/json',
+      'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
     });
@@ -173,7 +173,5 @@ const update = async (isbn, item) => {
     console.log(err);
   }
 };
-
-
 
 export { create, list, mylist, read, readBook, update, readComments,createComment, createReply  }

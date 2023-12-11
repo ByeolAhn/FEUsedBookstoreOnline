@@ -36,7 +36,7 @@ const AddBooks = () => {
     new BookModel("", "", "", "", "", 0, "", "", "", "")
   );
 
-//Event handler to update the state on form input change
+  //Event handler to update the state on form input change
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -119,6 +119,7 @@ const calculateExpiryDate = (expiryOption) => {
         console.log(err);
       });
   };
+
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -227,7 +228,6 @@ const calculateExpiryDate = (expiryOption) => {
                 name="price"
                 value={product.price || ""}
                 onChange={handleChange}
-                
                 required
               />
             </div>

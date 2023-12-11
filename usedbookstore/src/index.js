@@ -20,6 +20,8 @@ import Footer from "./components/Footer";
 import Signin from "./components/auth/signin";
 import Registration from "./components/auth/Registration";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import MyProfile from "./pages/MyProfile";
+import EditProfile from "./pages/EditProfile";
 
 export default function App() {
   return (
@@ -27,7 +29,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
-          <Route path="books/create" element={
+ <Route path="books/create" element={
           <PrivateRoute>
             <AddBooks /> 
           </PrivateRoute>} />
@@ -46,6 +48,11 @@ export default function App() {
           <Route path="/about" element={<About />} />
           <Route path="/users/signin" element={<Signin />} />
           <Route path="/users/create" element={<Registration />} />
+          <Route
+            path="/users/getUserByUserId/:userId"
+            element={<MyProfile />}
+          />
+          <Route path="/users/edit/:userId" element={<EditProfile />} />
         </Route>
       </Routes>
       <Footer />

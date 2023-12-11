@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { list } from "../../datasource/api-books";
 import { isAuthenticated } from "../auth/auth-helper";
-// Functional component definition for listing books
+
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +16,7 @@ const ListBooks = () => {
 
     list()
       .then((data) => {
-        setProductList(data || []); // Set to an empty array if data is undefined
+        setProductList(data || []);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -29,7 +29,7 @@ const ListBooks = () => {
     };
   }, []);
 
-  const hasExpired = (expiryDateString) => {
+ const hasExpired = (expiryDateString) => {
     const expiryDate = new Date(expiryDateString);
     return currentDate > expiryDate;
   };
@@ -39,7 +39,6 @@ const ListBooks = () => {
         (product) => !hasExpired(product.expiryDate) && product.active
       )
     : productList;
-
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -93,6 +92,7 @@ const ListBooks = () => {
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
                       <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
+
                       <td>
                       {hasExpired(product.expiryDate) ? "" : 
                               <Link
