@@ -1,4 +1,4 @@
-import { getToken } from "../components/auth/auth-helper"
+import { getToken } from "../components/auth/auth-helper";
 const apiURL = process.env.REACT_APP_APIURL;
 
 const create = async (product) => {
@@ -6,9 +6,9 @@ const create = async (product) => {
     let response = await fetch(`${apiURL}/books/create/`, {
       method: "POST",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken(),
       },
       body: JSON.stringify(product),
     });
@@ -23,8 +23,8 @@ const list = async () => {
     let response = await fetch(`${apiURL}/books/get/`, {
       method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
     return await response.json();
@@ -38,8 +38,8 @@ const read = async (isbn) => {
     let response = await fetch(apiURL + "/books/find/" + isbn, {
       method: "GET",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json",
       },
     });
 
@@ -61,9 +61,9 @@ const update = async (isbn, item) => {
     let response = await fetch(apiURL + "/books/update/" + isbn, {
       method: "PUT",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken(),
       },
       body: JSON.stringify(item),
     });
@@ -78,15 +78,15 @@ const remove = async (isbn) => {
     let response = await fetch(apiURL + "/books/delete/" + isbn, {
       method: "DELETE",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + getToken()
-      }
-    })
-    return await response.json()
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken(),
+      },
+    });
+    return await response.json();
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
-export { create, list, read, update, remove  }
+export { create, list, read, update, remove };

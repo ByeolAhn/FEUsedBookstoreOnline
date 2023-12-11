@@ -30,8 +30,8 @@ const ListBooks = () => {
 
   const handleRemove = (isbn) => {
     if (!isAuthenticated())
-      window.alert('You are not authenticated. Please, sign-in first.');
-    else if (window.confirm('Are you sure you want to delete this book?')) {
+      window.alert("You are not authenticated. Please, sign-in first.");
+    else if (window.confirm("Are you sure you want to delete this book?")) {
       remove(isbn)
         .then(() => {
           setProductList((prevProductList) =>
@@ -82,16 +82,73 @@ const ListBooks = () => {
               <tbody>
                 {productList &&
                   productList.map((product, index) => (
-                    <tr key={index} style={hasExpired(product.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.isbn}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.category}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.title}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.author}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.condition}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
-                    <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
-                    <td>
+                    <tr
+                      key={index}
+                      style={
+                        hasExpired(product.expiryDate)
+                          ? { color: "red", textDecoration: "line-through" }
+                          : {}
+                      }
+                    >
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.isbn}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.category}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.title}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.author}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.condition}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.price}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {product.description}
+                      </td>
+                      <td
+                        style={
+                          hasExpired(product.expiryDate) ? { color: "red" } : {}
+                        }
+                      >
+                        {hasExpired(product.expiryDate)
+                          ? "Expired"
+                          : "Available"}
+                      </td>
+                      <td>
                         <table className="table">
                           <tbody>
                             <tr>

@@ -19,6 +19,7 @@ import Signin from "./components/auth/signin";
 import Registration from "./components/auth/Registration";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import MyProfile from "./pages/MyProfile";
+import EditProfile from "./pages/EditProfile";
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
             path="/users/getUserByUserId/:userId"
             element={<MyProfile />}
           />
+          <Route path="/users/edit/:userId" element={<EditProfile />} />
         </Route>
       </Routes>
       <Footer />

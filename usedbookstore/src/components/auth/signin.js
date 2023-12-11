@@ -1,8 +1,7 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signin } from "../../datasource/api-user";
 import { authenticate } from "./auth-helper.js";
-
 
 //Defines a sign-in form with input fields for email and password.
 const Signin = () => {
@@ -24,11 +23,14 @@ const Signin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-  //Utilizes the signin function from the api-user module to interact with the backend.
+    //Utilizes the signin function from the api-user module to interact with the backend.
     signin(user)
       .then((data) => {
         if (data && data.success) {
           authenticate(data.token, () => {
+            console.log(data.user.id);
+            sessionStorage.setItem("userId", data.user.userId);
+            sessionStorage.setItem("authToken", data.token);
             navigate(from, { replace: true });
           });
         } else {
@@ -39,7 +41,7 @@ const Signin = () => {
         setErrorMsg(err.message);
         console.log(err);
       });
-  }; 
+  };
 
   return (
     <div className="container" style={{ paddingTop: 80 }}>

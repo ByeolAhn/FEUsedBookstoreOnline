@@ -2,7 +2,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { register } from "../../datasource/api-user";
 import { authenticate } from "./auth-helper.js";
-import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs"; // Import Bootstrap icons
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs'; // Import Bootstrap icons
+
 
 const Register = () => {
   const { state } = useLocation();
@@ -23,47 +24,48 @@ const Register = () => {
       city: "",
       country: "",
       postalCode: "",
-      state: "",
-    },
-  });
-  //Handles form changes, submission, and displays error messages if registration fails.
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name.startsWith("address.")) {
-      const addressKey = name.split(".")[1];
-
-      setUser((prevFormData) => ({
-        ...prevFormData,
-        address: {
-          ...prevFormData.address,
-          [addressKey]: value,
-        },
-      }));
-    } else {
-      setUser((prevFormData) => ({
-        ...prevFormData,
-        [name]: value,
-      }));
+      state: ""
     }
-  };
+  });
+//Handles form changes, submission, and displays error messages if registration fails.
+const handleChange = (event) => {
+  const { name, value } = event.target;
+
+  if (name.startsWith('address.')) {
+    const addressKey = name.split('.')[1];
+
+    setUser(prevFormData => ({
+      ...prevFormData,
+      address: {
+        ...prevFormData.address,
+        [addressKey]: value
+      }
+    }));
+  } else {
+    setUser(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  }
+};
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true); // New state variable
-
+  
   const handleConfirmPasswordChange = (event) => {
     const { value } = event.target;
     setConfirmPassword(value);
-    // Check if passwords match immediately as the user types
-    if (user.password !== value) {
-      setPasswordsMatch(false);
-    } else {
-      setPasswordsMatch(true);
-    }
-  };
+  // Check if passwords match immediately as the user types
+  if (user.password !== value) {
+    setPasswordsMatch(false);
+  } else {
+    setPasswordsMatch(true);
+  }
+};
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -81,6 +83,7 @@ const Register = () => {
             navigate(from, { replace: true });
           });
         } else {
+         
           setErrorMsg(data.message);
         }
       })
@@ -113,7 +116,7 @@ const Register = () => {
                 required
               />
             </div>
-
+            
             <div className="form-group">
               <label htmlFor="emailTextField">Email</label>
               <input
@@ -127,61 +130,61 @@ const Register = () => {
                 required
               />
             </div>
-
+           
             <div className="form-group">
-              <label htmlFor="passwordTextField">Password</label>
-              <div className="input-group">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="form-control"
-                  id="passwordTextField"
-                  placeholder="Enter your password"
-                  name="password"
-                  value={user.password || ""}
-                  onChange={handleChange}
-                  required
-                />
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
-                </button>
-              </div>
+            <label htmlFor="passwordTextField">Password</label>
+            <div className="input-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                id="passwordTextField"
+                placeholder="Enter your password"
+                name="password"
+                value={user.password || ""}
+                onChange={handleChange}
+                required
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
+              </button>
             </div>
-            <div className="form-group">
-              <label htmlFor="confirmPasswordTextField">Confirm Password</label>
-              <div className="input-group">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  className={`form-control ${
-                    !passwordsMatch ? "is-invalid" : ""
-                  }`}
-                  id="confirmPasswordTextField"
-                  placeholder="Confirm your password"
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
-                  required
-                />
-                <button
-                  className="btn btn-outline-secondary"
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <BsFillEyeSlashFill />
-                  ) : (
-                    <BsFillEyeFill />
-                  )}
-                </button>
-              </div>
-              {!passwordsMatch && (
-                <div className="invalid-feedback">Passwords do not match</div>
-              )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirmPasswordTextField">Confirm Password</label>
+            <div className="input-group">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                className={`form-control ${
+                  !passwordsMatch ? "is-invalid" : ""
+                }`}
+                id="confirmPasswordTextField"
+                placeholder="Confirm your password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                required
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <BsFillEyeSlashFill />
+                ) : (
+                  <BsFillEyeFill />
+                )}
+              </button>
             </div>
-
+            {!passwordsMatch && (
+              <div className="invalid-feedback">Passwords do not match</div>
+            )}
+          </div>
+            
             <div className="form-group">
               <label htmlFor="roleSelectField">Role</label>
               <select

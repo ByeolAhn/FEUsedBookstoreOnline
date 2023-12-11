@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { deleteUserAccount } from "../datasource/api-user";
 
@@ -75,14 +76,16 @@ const MyProfile = () => {
               style={{ display: "flex", flexDirection: "column", gap: "10px" }}
             >
               <h1>MY PROFILE</h1>
-              <h4>
-                <i className="fas fa-edit ml-2"></i>
-              </h4>
+              <div>
+                <Link to="/users/edit/:userId" className="btn btn-primary">
+                  Edit Profile
+                </Link>
+              </div>
 
-              <label>
+              {/* <label>
                 <b>My Id:</b>
               </label>
-              <input type="text" value={userId} disabled />
+              <input type="text" value={userId} disabled /> */}
 
               <label>
                 <b>Username:</b>

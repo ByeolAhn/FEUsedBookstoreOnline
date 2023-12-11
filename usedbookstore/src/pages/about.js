@@ -27,7 +27,7 @@ const About = () => {
         about technology and its impact on society. Our group is comprised of:
       </p>
       <ul>
-        <li>Aniebonam Vivianzzzz</li>
+        <li>Aniebonam Vivian</li>
         <li>Sarjo Manneh</li>
         <li>Oladega Farouk</li>
         <li>Sua Cha</li>
