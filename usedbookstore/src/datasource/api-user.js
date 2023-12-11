@@ -1,3 +1,4 @@
+import { getToken } from "../components/auth/auth-helper";
 let apiURL = process.env.REACT_APP_APIURL;
 
 const signin = async (user) => {
@@ -60,21 +61,21 @@ const deleteUserAccount = async (userId, token) => {
   }
 };
 
-const updateUser = async (userId, user, token) => {
-  const response = await fetch(`${apiURL}/users/edit/${userId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to update user");
+const updateUser = async (userId, user) => {
+  try {
+    let response = await fetch(apiURL + "/users/edit/" + userId, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getToken(),
+      },
+      body: JSON.stringify(user),
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
   }
-
-  return await response.json();
 };
 
 export { signin, register, getByUserId, deleteUserAccount, updateUser };

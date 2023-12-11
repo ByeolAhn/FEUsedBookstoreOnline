@@ -77,8 +77,8 @@ const MyProfile = () => {
             >
               <h1>MY PROFILE</h1>
               <div>
-                <Link to="/users/edit/:userId" className="btn btn-primary">
-                  Edit Profile
+                <Link to={`/users/edit/${userId}`} className="btn btn-primary">
+                  <i className="fas fa-user"></i> Edit Profile
                 </Link>
               </div>
 
