@@ -341,7 +341,7 @@ const DetailBooks = () => {
                                                             <span className="round pt-2">
                                                                 <img
                                                                     src="https://img.icons8.com/bubbles/100/000000/groups.png"
-                                                                    className="align-self-start mr-3"
+                                                                    className="imgcomment align-self-start mr-3"
                                                                     alt="icon"
                                                                 />
                                                             </span>
@@ -359,7 +359,7 @@ const DetailBooks = () => {
                                                                 {comment.commentDetails.map((subComment) => (
                                                                     <div className="row">
                                                                         <div className="col-md-2">
-                                                                            <div className="media mt-3 comment"> <a href="#"><img src="https://img.icons8.com/bubbles/100/000000/lock-male-user.png" className="align-self-center mr-1" /></a>
+                                                                            <div className="media mt-3 comment"> <a href="#"><img src="https://img.icons8.com/bubbles/100/000000/lock-male-user.png" className="imgcomment align-self-center mr-1" /></a>
                                                                             </div>
                                                                         </div>
 
