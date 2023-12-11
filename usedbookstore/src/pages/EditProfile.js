@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// import { isAuthenticated } from "../auth/auth-helper";
+import { isAuthenticated } from "../components/auth/auth-helper";
 import { Link } from "react-router-dom";
 import { updateUser } from "../datasource/api-user";
 
@@ -11,6 +11,7 @@ const EditProfile = () => {
     username: "",
     email: "",
     role: "",
+    phoneNo: "",
     address: { street: "", city: "", country: "", postalCode: "", state: "" },
     lastlogin: "",
   });
@@ -32,6 +33,7 @@ const EditProfile = () => {
               username: userData.username,
               email: userData.email,
               role: userData.role,
+              phoneNo: userData.phoneNumber,
               address: userData.address || {
                 street: "",
                 city: "",
@@ -68,18 +70,25 @@ const EditProfile = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const updatedUserResponse = await updateUser(userId, user, token);
-      if (updatedUserResponse.success) {
-        alert("Profile updated successfully");
-        navigate(`/users/getUserByUserId/${userId}`);
-      } else {
-        alert(updatedUserResponse.message || "Failed to update profile.");
-        console.log(updatedUserResponse.message);
+
+    // Check if the user is authenticated
+    if (isAuthenticated()) {
+      try {
+        const updatedUserResponse = await updateUser(userId, user, token);
+        if (updatedUserResponse.success) {
+          alert("Profile updated successfully");
+          navigate(`/users/edit/${userId}`);
+        } else {
+          alert(updatedUserResponse.message || "Failed to update profile.");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Error updating profile: " + error.message);
       }
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Error updating profile: " + error.message);
+    } else {
+      // Handle the case where the user is not authenticated
+      alert("You are not authenticated. Please login to update your profile.");
+      // Optionally redirect to login page or other appropriate route
     }
   };
 
@@ -135,6 +144,20 @@ const EditProfile = () => {
                 id="role"
                 name="role"
                 value={user.role || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Phone No */}
+            <div className="form-group">
+              <label htmlFor="phoneNo">Phone Number:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="phoneNo"
+                name="phoneNo"
+                value={user.phoneNo || ""}
                 onChange={handleChange}
                 required
               />
