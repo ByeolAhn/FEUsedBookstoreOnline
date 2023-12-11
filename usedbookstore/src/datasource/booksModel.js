@@ -8,7 +8,9 @@ class BookModel {
     condition,
     price,
     description,
-    expiryDate // Add the expiryDate field
+    expiryDate,
+    postedBy,
+    active
   ) {
     this.id = id;
     this.isbn = isbn;
@@ -18,7 +20,9 @@ class BookModel {
     this.condition = condition;
     this.price = price;
     this.description = description;
-    this.expiryDate = expiryDate; // Assign the expiryDate field
+    this.expiryDate = expiryDate;
+    this.postedBy = postedBy;
+    this.active = active;
   }
 }
 export default BookModel;

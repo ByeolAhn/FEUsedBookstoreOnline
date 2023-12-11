@@ -17,6 +17,7 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "",
     phoneNumber: "",
     address: {
@@ -74,14 +75,16 @@ const handleChange = (event) => {
       return;
     }
     // Utilizes the register function from the api-user module to interact with the backend.
+    if (user.password !== user.confirmPassword) {
+      setErrorMsg("Passwords do not match");
+      return;
+    }
     register(user)
       .then((data) => {
         if (data && data.success) {
           window.alert("Registered User Successfully To Our Database");
-          //Upon successful registration, alerts the user and triggers authentication.
-          authenticate(data.token, () => {
-            navigate(from, { replace: true });
-          });
+          //Upon successful registration, alerts the user
+          navigate('/users/signin');
         } else {
          
           setErrorMsg(data.message);
@@ -185,6 +188,20 @@ const handleChange = (event) => {
             )}
           </div>
             
+            <div className="form-group">
+              <label htmlFor="confirmPasswordTextField">Confirm Password</label>
+              <input
+                type="password"
+                className="form-control"
+                id="confirmPasswordTextField"
+                placeholder="Confirm your password"
+                name="confirmPassword"
+                value={user.confirmPassword || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <br />
             <div className="form-group">
               <label htmlFor="roleSelectField">Role</label>
               <select
