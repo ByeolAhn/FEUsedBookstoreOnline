@@ -17,7 +17,7 @@ const ListMyBooks = () => {
     const loadBooks = () => {
         const token = getToken();
         const userId = token ? jwtDecode(token).id : null;
-
+        console.log(userId);
         if (!userId) {
             navigate("/users/signin");
             return;
@@ -40,7 +40,7 @@ const ListMyBooks = () => {
     const hasExpired = (expiryDateString) => {
         const expiryDate = new Date(expiryDateString);
         return currentDate > expiryDate;
-      };
+    };
 
 
     return (

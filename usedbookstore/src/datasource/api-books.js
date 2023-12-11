@@ -113,9 +113,27 @@ const createComment = async (comment) => {
   }
 };
 
+
+const createReply = async (comment) => {
+  try {
+    let response = await fetch(`${apiURL}/comments/createReply/`, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        //'Authorization': 'Bearer ' + getToken()
+      },
+      body: JSON.stringify(comment),
+    });
+    return await response.json();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 const readComments = async (isbn) => {
   try {
-    console.log("into readcomments")
     let response = await fetch(apiURL + "/comments/findbyisbn/" + isbn, {
       method: "GET",
       headers: {
@@ -158,4 +176,4 @@ const update = async (isbn, item) => {
 
 
 
-export { create, list, mylist, read, readBook, update, readComments,createComment  }
+export { create, list, mylist, read, readBook, update, readComments,createComment, createReply  }
