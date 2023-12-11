@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { list, remove } from "../../datasource/api-books";
+import { list } from "../../datasource/api-books";
 import { isAuthenticated } from "../auth/auth-helper";
 
 const ListBooks = () => {
   const [productList, setProductList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [onlyShowAvailable, setOnlyShowAvailable] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -28,29 +29,16 @@ const ListBooks = () => {
     };
   }, []);
 
-  const handleRemove = (isbn) => {
-    if (!isAuthenticated())
-      window.alert("You are not authenticated. Please, sign-in first.");
-    else if (window.confirm("Are you sure you want to delete this book?")) {
-      remove(isbn)
-        .then(() => {
-          setProductList((prevProductList) =>
-            prevProductList.filter((product) => product.isbn !== isbn)
-          );
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
-
-  const hasExpired = (expiryDateString) => {
+ const hasExpired = (expiryDateString) => {
     const expiryDate = new Date(expiryDateString);
-    console.log("Expiry Date:", expiryDate);
-    console.log("Current Date:", currentDate);
     return currentDate > expiryDate;
   };
 
+  const filteredProductList = onlyShowAvailable
+    ? productList.filter(
+        (product) => !hasExpired(product.expiryDate) && product.active
+      )
+    : productList;
   return (
     <div className="container" style={{ paddingTop: 80 }}>
       <div className="row">
@@ -59,6 +47,19 @@ const ListBooks = () => {
           <Link to="/books/create" className="btn btn-primary">
             Add a new Book
           </Link>
+        </div>
+        <div>
+          <Link to="/books/mylist" className="btn btn-primary">
+            My book list
+          </Link>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={onlyShowAvailable}
+            onChange={(e) => setOnlyShowAvailable(e.target.checked)}
+          />
+          <label>Show only available books</label>
         </div>
 
         <div className="table-responsive">
@@ -76,102 +77,32 @@ const ListBooks = () => {
                   <th>Price &nbsp;(CAD)&nbsp;</th>
                   <th>Description</th>
                   <th>Availability</th>
-                  <th>Actions</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
-                {productList &&
-                  productList.map((product, index) => (
-                    <tr
-                      key={index}
-                      style={
-                        hasExpired(product.expiryDate)
-                          ? { color: "red", textDecoration: "line-through" }
-                          : {}
-                      }
-                    >
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.isbn}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.category}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.title}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.author}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.condition}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.price}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {product.description}
-                      </td>
-                      <td
-                        style={
-                          hasExpired(product.expiryDate) ? { color: "red" } : {}
-                        }
-                      >
-                        {hasExpired(product.expiryDate)
-                          ? "Expired"
-                          : "Available"}
-                      </td>
+                {filteredProductList &&
+                  filteredProductList.map((product, index) => (
+                    <tr key={index} style={hasExpired(product.expiryDate) ? { color: 'red', textDecoration: 'line-through' } : {}}>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.isbn}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.category}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.title}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.author}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.condition}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.price}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{product.description}</td>
+                      <td style={hasExpired(product.expiryDate) ? { color: 'red' } : {}}>{hasExpired(product.expiryDate) ? "Expired" : "Available"}</td>
+
                       <td>
-                        <table className="table">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <Link
-                                  to={`/books/update/${product.isbn}`}
-                                  className="btn btn-primary btn-sm"
-                                >
-                                  <i className="fas fa-pencil-alt"></i>
-                                </Link>
-                              </td>
-                              <td>
-                                <button
-                                  onClick={() => handleRemove(product.isbn)}
-                                  className="btn btn-danger btn-sm"
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
+                      {hasExpired(product.expiryDate) ? "" : 
+                              <Link
+                              to={`/books/details/${product.isbn}`}
+                              className="btn btn-primary btn-sm"
+                          >
+                              <i className="fas fa-comment-alt"></i>
+                          </Link>}
+                                            
+                                        </td>
                     </tr>
                   ))}
               </tbody>

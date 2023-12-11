@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { create } from "../../datasource/api-books";
 import BookModel from "../../datasource/booksModel";
+import { getToken } from "../auth/auth-helper";
+import { jwtDecode } from "jwt-decode";
 import "./addBookStyles.css";
 
 // Predefined list of categories for books
@@ -31,7 +33,7 @@ const categories = [
 const AddBooks = () => {
   let navigate = useNavigate();
   let [product, setProduct] = useState(
-    new BookModel("", "", "", "", "", 0, "")
+    new BookModel("", "", "", "", "", 0, "", "", "", "")
   );
 
   //Event handler to update the state on form input change
@@ -40,47 +42,71 @@ const AddBooks = () => {
     setProduct((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
 
-  // Function to calculate the expiry date based on the selected option
-  const calculateExpiryDate = (expiryOption) => {
-    const currentDate = new Date();
-    switch (expiryOption) {
-      case "20 seconds":
-        return new Date(currentDate.getTime() + 20 * 1000);
-      case "24HR":
-        return new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
-      case "3DAYS":
-        return new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-      case "1WEEK":
-        return new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-      // Add cases for other durations similarly...
-      default:
-        return null;
-    }
-  };
-  // Event handler for form submission
+// Function to calculate the expiry date based on the selected option
+const calculateExpiryDate = (expiryOption) => {
+  const currentDate = new Date();
+  switch (expiryOption) {
+    case "20 seconds":
+      const twentySecondsLater = new Date(currentDate.getTime() + 20 * 1000);
+      console.log("20 seconds later:", twentySecondsLater);
+      return twentySecondsLater;
+    case "24HR":
+      const twentyFourHoursLater = new Date(currentDate.getTime() + 24 * 60 * 60 * 1000);
+      console.log("24 hours later:", twentyFourHoursLater);
+      return twentyFourHoursLater;
+    case "3DAYS":
+      const threeDaysLater = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+      console.log("3 days later:", threeDaysLater);
+      return threeDaysLater;
+    case "1WEEK":
+      const oneWeekLater = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+      console.log("1 week later:", oneWeekLater);
+      return oneWeekLater;
+    default:
+      console.log("Invalid expiry option");
+      return null;
+  }
+};
+
+
+//Event handler for form submission
   const handleSubmit = (event) => {
     event.preventDefault();
+    const token = getToken();
+    const decodedToken = jwtDecode(token);
+    console.log("Decoded Token:", decodedToken);
+    const userId = decodedToken.id;
+    console.log("Extracted userId:", userId);
+    console.log("Retrieved token:", token);
+    console.log("Decoded user:", jwtDecode(token));
+
+
+    console.log("Product Data: ", product);
     const expiryDate = calculateExpiryDate(product.expiryDate); // Calculate expiry date based on selected option
-
-    let newProduct; // Declare newProduct here
+    console.log("Expiry option: ", product.expiryDate);
+    let newProduct; // Declare newProduct 
     // Check if expiryDate is valid before proceeding
-    if (expiryDate) {
-      newProduct = {
-        isbn: product.isbn,
-        category: product.category,
-        title: product.title,
-        author: product.author,
-        condition: product.condition,
-        price: product.price,
-        description: product.description,
-
-        expiryDate: expiryDate.toISOString(), // Convert to string format for storage
-      };
+  if (expiryDate) {
+    newProduct= {
+      isbn: product.isbn,
+      category: product.category,
+      title: product.title,
+      author: product.author,
+      condition: product.condition,
+      price: product.price,
+      description: product.description,
+      expiryDate: expiryDate.toISOString(), // Convert to string format for storage
+      postedBy: userId,
+      active: product.active,
     }
+    };
+
+    console.log("New Product Data: ", newProduct);
 
     // Invokes the API function to add a new book.
     create(newProduct)
       .then((data) => {
+        console.log("API Response: ", data);
         if (data && data.id) {
           alert("Item added with the id " + data.id);
           navigate("/books/get");
@@ -222,11 +248,6 @@ const AddBooks = () => {
                 <option value="24HR">24 Hours</option>
                 <option value="3DAYS">3 Days</option>
                 <option value="1WEEK">1 Week</option>
-                <option value="3WEEKS">3 Weeks</option>
-                <option value="1MONTH">1 Month</option>
-                <option value="3MONTHS">3 Months</option>
-                <option value="6MONTHS">6 Months</option>
-                <option value="1YEAR">1 Year</option>
               </select>
             </div>
 
