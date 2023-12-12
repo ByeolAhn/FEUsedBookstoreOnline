@@ -78,10 +78,8 @@ const handleChange = (event) => {
       .then((data) => {
         if (data && data.success) {
           window.alert("Registered User Successfully To Our Database");
-          //Upon successful registration, alerts the user and triggers authentication.
-          authenticate(data.token, () => {
-            navigate(from, { replace: true });
-          });
+          //Upon successful registration, alerts the user
+          navigate('/users/signin');
         } else {
          
           setErrorMsg(data.message);
