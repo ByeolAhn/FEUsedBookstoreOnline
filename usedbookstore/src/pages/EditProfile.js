@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { isAuthenticated } from "../components/auth/auth-helper";
 import { Link } from "react-router-dom";
 import { updateUser } from "../datasource/api-user";
 
@@ -71,24 +70,17 @@ const EditProfile = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if the user is authenticated
-    if (isAuthenticated()) {
-      try {
-        const updatedUserResponse = await updateUser(userId, user, token);
-        if (updatedUserResponse.success) {
-          alert("Profile updated successfully");
-          navigate(`/users/edit/${userId}`);
-        } else {
-          alert(updatedUserResponse.message || "Failed to update profile.");
-        }
-      } catch (error) {
-        console.error("Error updating profile:", error);
-        alert("Error updating profile: " + error.message);
+    try {
+      const updatedUserResponse = await updateUser(userId, user, token);
+      if (updatedUserResponse.success) {
+        alert("Profile updated successfully");
+        navigate(`/users/edit/${userId}`);
+      } else {
+        alert(updatedUserResponse.message || "Failed to update profile.");
       }
-    } else {
-      // Handle the case where the user is not authenticated
-      alert("You are not authenticated. Please login to update your profile.");
-      // Optionally redirect to login page or other appropriate route
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile: " + error.message);
     }
   };
 
