@@ -206,7 +206,7 @@ const EditProfile = () => {
                 type="text"
                 className="form-control"
                 id="addressPcode"
-                name="address.postalcode"
+                name="address.postalCode"
                 value={user.address.postalCode || ""}
                 onChange={handleChange}
               />
